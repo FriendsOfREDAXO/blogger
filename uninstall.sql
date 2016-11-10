@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_entries`;
+DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_categories`;

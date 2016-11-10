@@ -1,0 +1,13 @@
+package: blogger
+version: '0.0.0'
+
+page:
+  title: 'blogger'
+  subpages:
+    entries: { title: 'Einträge' }
+    categories: { title: 'Kategorien'}
+    tags: { title: 'Tags'}
+
+requires:
+  packages:
+    redactor2: '^3.0.1'
