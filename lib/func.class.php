@@ -44,7 +44,6 @@ class rex_blogger_func {
 
 	}
 
-
 	/**
 	 * Returns all categories used in a multiple select field as a string array
 	 *
@@ -172,31 +171,49 @@ class rex_blogger_func {
 
 
 	/**
-	 * Returns all dates used by the entries as a datetime string array
+	 * Returns all months and years used by the entries as a datetime string array
 	 *
 	 * @param bool $ignoreOfflines
 	 *
-	 * @return String[]
+	 * @return array('year'=>STRING, 'month'=>STRING)
 	 */
-	public static function get_all_dates($ignoreOfflines=true)
+	public static function get_all_months($reverse=false, $ignoreOfflines=true)
 	{
 
 		$dates = array();
 
-		$sql = rex_sql::factory();
-		$sql->setTable(rex::getTablePrefix().'blogger_entries');
-		if ($ignoreOfflines) {		
-			$sql->setWhere('`offline`=0 AND `translation`=0');
+		$whereStatement = '';
+		if ($ignoreOfflines) {
+			$whereStatement = 'WHERE offline=0 AND translation=0';
 		}
-		$sql->select('`createdAt`');
+
+		$orderStatement = 'ORDER BY year ASC, month ASC';
+		if ($reverse) {
+			$orderStatement = 'ORDER BY year DESC, month DESC';
+		}
+
+		$query = ('
+			SELECT DISTINCT
+				month(post_date) AS month,
+				year(post_date) AS year
+			FROM rex_blogger_entries
+				'.$whereStatement.'
+				'.$orderStatement.'
+		');
+
+		$sql = rex_sql::factory();
+		$sql->setQuery($query);
+		$sql->execute();
 
 		while ($sql->hasNext()) {
-			$dates[] = $sql->getValue('createdAt');
+			$temp = [];
+			$temp['month'] = $sql->getValue('month');
+			$temp['year'] = $sql->getValue('year');
+			$dates[] = $temp;
 			$sql->next();
 		}
 
 		return $dates;
-
 	}
 
 }
