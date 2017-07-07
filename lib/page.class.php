@@ -83,7 +83,11 @@ class rex_blogger_page extends rex_blogger_func {
 	 */
 	public function get_entries_blog_page()
 	{
-		$query = 'SELECT e.*, c.`name` FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
+		$query = 'SELECT
+			e.*,
+			c.`name`,
+			UNIX_TIMESTAMP(e.`post_date`) AS postTimestamp
+			FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
 		$query .= 'WHERE e.`offline`=0 AND e.`clang`='.rex_clang::getCurrent()->getId();
@@ -104,8 +108,14 @@ class rex_blogger_page extends rex_blogger_func {
 		// group distinct
 		$query .= ' GROUP BY(e.`art_id`)';
 
+		// order
+		$query .= ' ORDER BY postTimestamp DESC';
+
 		// limit
-		$query .= sprintf(' LIMIT %u, %u', $this->current_page*$this->articles_per_page, $this->articles_per_page);
+		$query .= sprintf(' LIMIT %u, %u',
+			$this->current_page*$this->articles_per_page,
+			$this->articles_per_page
+		);
 
 		$sql = rex_sql::factory();
 		$sql->setQuery($query);

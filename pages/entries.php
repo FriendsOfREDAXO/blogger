@@ -163,6 +163,11 @@
 			$field->setLabel('Headline');
 
 
+			// creator
+			$field = $form->addTextField('postedBy');
+			$field->setLabel('Ersteller');
+			
+
 			// text
 			$field = $form->addTextAreaField('content', null, array("class"=>"redactorEditor2-full"));
 			$field->setLabel('Text');
@@ -308,6 +313,11 @@
 			// headline
 			$field = $form->addTextField('headline');
 			$field->setLabel('Headline');
+
+
+			// creator
+			$field = $form->addTextField('postedBy');
+			$field->setLabel('Ersteller');
 
 
 			// text

@@ -13,6 +13,7 @@ CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
   `tags` text NOT NULL DEFAULT '',
   `offline` smallint(1) NOT NULL DEFAULT 0,
   `post_date` datetime NOT NULL,
+  `postedBy` VARCHAR(255) NOT NULL DEFAULT '',
   `createdBy` smallint(5) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedBy` smallint(5) NOT NULL,
