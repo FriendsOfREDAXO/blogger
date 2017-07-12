@@ -1,7 +1,6 @@
 <?php
 
 class rex_blogger_func {
-
 	/**
 	 * Returns an array of rex_blogger_entries as a rex_blogger array from an rex_sql object
 	 *
@@ -9,8 +8,7 @@ class rex_blogger_func {
 	 *
 	 * @return rex_blogger_entry[]
 	 */
-	protected static function get_by_sql($sql)
-	{
+	protected static function get_by_sql($sql) {
 		$entries = array();
 		while ($sql->hasNext()) {
 			$entry = new rex_blogger_entry();
@@ -41,7 +39,6 @@ class rex_blogger_func {
 		}
 
 		return $entries;
-
 	}
 
 	/**
@@ -52,8 +49,7 @@ class rex_blogger_func {
 	 *
 	 * @return String[]
 	 */
-	protected static function get_tags_from_value($string, $delimiter='|')
-	{
+	protected static function get_tags_from_value($string, $delimiter='|') {
 
 		$tags = array();
 		$tmp = array_filter(explode($delimiter, $string));
@@ -86,8 +82,7 @@ class rex_blogger_func {
 	 *
 	 * @return rex_blogger_entry
 	 */
-	public static function get_by_id($id, $ignoreOfflines=true)
-	{
+	public static function get_by_id($id, $ignoreOfflines=true) {
 
 		$query = 'SELECT e.*, c.`name` FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
@@ -113,8 +108,7 @@ class rex_blogger_func {
 	 *
 	 * @return rex_blogger_entry[]
 	 */
-	public static function get_latest_entries($limit=1, $ignoreOfflines=true)
-	{
+	public static function get_latest_entries($limit=1, $ignoreOfflines=true) {
 		// TODO
 		return null;
 	}
@@ -125,8 +119,7 @@ class rex_blogger_func {
 	 *
 	 * @return String[]
 	 */
-	public static function get_tags()
-	{
+	public static function get_tags() {
 
 		$tags = array();
 
@@ -141,7 +134,6 @@ class rex_blogger_func {
 		}		
 
 		return $tags;
-
 	}
 
 
@@ -150,8 +142,7 @@ class rex_blogger_func {
 	 *
 	 * @return String[]
 	 */
-	public static function get_categories()
-	{
+	public static function get_categories() {
 
 		$categories = array();
 
@@ -166,7 +157,6 @@ class rex_blogger_func {
 		}		
 
 		return $categories;
-
 	}
 
 
@@ -177,8 +167,7 @@ class rex_blogger_func {
 	 *
 	 * @return array('year'=>STRING, 'month'=>STRING)
 	 */
-	public static function get_all_months($reverse=true, $ignoreOfflines=true)
-	{
+	public static function get_all_months($reverse=true, $ignoreOfflines=true) {
 
 		$dates = array();
 
@@ -215,5 +204,4 @@ class rex_blogger_func {
 
 		return $dates;
 	}
-
 }

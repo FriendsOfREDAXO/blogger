@@ -17,8 +17,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @param int $articles
 	 */
-	protected function __construct($articles)
-	{
+	protected function __construct($articles) {
 		$this->current_page = rex_request('blogger_page', 'int');
 		$this->articles_per_page = $articles;
 
@@ -40,8 +39,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @return bool
 	 */
-	public function is_single_entry()
-	{
+	public function is_single_entry() {
 		return ($this->single_entry) ? true : false;
 	}
 
@@ -52,8 +50,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @return rex_blogger_entry
 	 */
-	public function get_single_entry()
-	{
+	public function get_single_entry() {
 		if (!$this->is_single_entry())
 			return null;
 
@@ -87,8 +84,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 * 
 	 * @return rex_blogger_entry[]
 	 */
-	public function get_entries_blog_page()
-	{
+	public function get_entries_blog_page() {
 		$query = 'SELECT
 			e.*,
 			c.`name`,
@@ -140,7 +136,6 @@ class rex_blogger_page extends rex_blogger_func {
 		$tmp = parent::get_by_sql($sql);
 
 		return $tmp;
-
 	}
 
 
@@ -149,8 +144,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 * 
 	 *
 	 */
-	private function set_max_page_number()
-	{
+	private function set_max_page_number() {
 
 		$query = 'SELECT e.*, c.`name` FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
@@ -178,7 +172,6 @@ class rex_blogger_page extends rex_blogger_func {
 		$sql->execute();
 
 		$this->max_page_number = (int)ceil($sql->getRows()/$this->articles_per_page);
-
 	}
 
 
@@ -187,8 +180,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @return int
 	 */
-	public function get_max_page_number()
-	{
+	public function get_max_page_number() {
 		return $this->max_page_number;
 	}
 
@@ -199,8 +191,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 * @param String $query
 	 * @param char $delimiter
 	 */
-	public function set_tags($query, $delimiter=',')
-	{
+	public function set_tags($query, $delimiter=',') {
 		$this->tags = explode($delimiter, $query);
 	}
 
@@ -210,8 +201,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @param int $category_id
 	 */
-	public function set_category_id($category_id)
-	{
+	public function set_category_id($category_id) {
 		$this->category_id = $category_id;
 	}
 
@@ -223,8 +213,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @return String
 	 */
-	public function get_url_page($page)
-	{
+	public function get_url_page($page) {
 		$nextPageNr = $page;
 		$currentArticleUrl = rex_article::getCurrent()->getUrl();
 
@@ -236,21 +225,35 @@ class rex_blogger_page extends rex_blogger_func {
 		if ($nextPageNr > $this->max_page_number)
 			return null;
 
+		// tags
 		if ($this->tags[0] != '')
 			$currentTags = '&blogger_tags='.implode(',', $this->tags);
 		else
 			$currentTags = '';
 
+		// category
 		if ($this->category_id)
 			$currentCategory = '&blogger_category='.$this->category_id;
 		else
 			$currentCategory = '';
 
+		// year
+		if ($this->year)
+			$currentYear = '&bloggerYear='.$this->year;
+		else
+			$currentYear = '';
+
+		// month
+		if ($this->month)
+			$currentMonth = '&bloggerMonth='.$this->month;
+		else
+			$currentMonth = '';
+
 		$char = (rex_addon::exists('yrewrite')) ? '?' : '&';
 
 		$nextPage = $char.'blogger_page='.$nextPageNr;
 
-		return $currentArticleUrl.$nextPage.$currentTags.$currentCategory;
+		return $currentArticleUrl.$nextPage.$currentTags.$currentCategory.$currentYear.$currentMonth;
 	}
 
 
@@ -259,8 +262,7 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @return String
 	 */
-	public function get_url_next_page()
-	{
+	public function get_url_next_page() {
 		return $this->get_url_page($this->current_page+1);
 	}
 
@@ -270,11 +272,9 @@ class rex_blogger_page extends rex_blogger_func {
 	 *
 	 * @return String
 	 */
-	public function get_url_previous_page()
-	{
+	public function get_url_previous_page() {
 		return $this->get_url_page($this->current_page-1);
 	}
-
 }
 
 ?>
