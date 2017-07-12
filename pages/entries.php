@@ -11,11 +11,11 @@
 			try {
 				$updateSql = rex_sql::factory();
 				$updateSql->setTable(rex::getTablePrefix().'blogger_entries');
-				$updateSql->setWhere(['art_id'=>$type_id]);
+				$updateSql->setWhere(['aid'=>$type_id]);
 				$updateSql->setValues([
 					'category'=>$edited['category'],
 					'tags'=>"|".implode('|', $edited['tags'])."|",
-					'post_date'=>$edited['post_date']
+					'postedAt'=>$edited['postedAt']
 				]);
 				$updateSql->update();
 			} catch (rex_sql_exception $e) {
@@ -25,8 +25,8 @@
 	} elseif (isset($_GET['list']) && isset($_GET['form']) && $func == '') {
 		try {
 			$query = 'UPDATE `'.rex::getTablePrefix().'blogger_entries` ';
-			$query .= 'SET `art_id` = `id` ';
-			$query .= 'WHERE `art_id`=0;';
+			$query .= 'SET `aid` = `id` ';
+			$query .= 'WHERE `aid`=0;';
 
 			$updateSql = rex_sql::factory();
 			$updateSql->setQuery($query);
@@ -41,7 +41,7 @@
 
 		$sql = rex_sql::factory();
 		$sql->setTable(rex::getTablePrefix() . 'blogger_entries');
-		$sql->setWhere(sprintf('`id`=%u OR `art_id`=%u', $type_id, $type_id));
+		$sql->setWhere(sprintf('`id`=%u OR `aid`=%u', $type_id, $type_id));
 		$sql->setValues(array("offline"=>"1"));
 
 		try {
@@ -58,7 +58,7 @@
 
 		$sql = rex_sql::factory();
 		$sql->setTable(rex::getTablePrefix() . 'blogger_entries');
-		$sql->setWhere(sprintf('`id`=%u OR `art_id`=%u', $type_id, $type_id));
+		$sql->setWhere(sprintf('`id`=%u OR `aid`=%u', $type_id, $type_id));
 		$sql->setValues(array("offline"=>"0"));
 
 		try {
@@ -74,7 +74,7 @@
 		/**
 		 * STANDARD
 		 */
-		$query = 'SELECT e.`id`, e.`art_id`, e.`headline`, c.`name`, e.`createdAt`, e.`offline` ';
+		$query = 'SELECT e.id, e.aid, e.headline, c.name, e.postedAt, e.offline ';
 		$query .= 'FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
@@ -92,17 +92,26 @@
 		$list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
 		$list->setColumnParams($thIcon, ['func' => 'edit', 'id' => '###id###']);
 
-		$list->setColumnLabel('id', 'Id');
-		$list->setColumnLabel('art_id', 'Artikel ID');
-		$list->setColumnLabel('headline', 'Headline');
-		$list->setColumnLabel('name', 'Kategorie');
-
-		$list->setColumnLabel('createdAt', 'Erstellt am');
-		$list->setColumnFormat('createdAt', 'custom', function ($params) {
+		$list->removeColumn('id');
+		$list->setColumnLabel('aid', 'Nr.');
+		$list->setColumnLabel('headline', 'Titel');
+		$list->setColumnFormat('headline', 'custom', function($params) {
 			$list = $params['list'];
 
-			if ($list->getValue('e.createdAt') != "0000-00-00 00:00:00") {
-				return date('d.m.Y', strtotime($list->getValue('e.createdAt')));
+			$title = $list->getValue('headline');
+			$output = substr($title, 0, 50);
+
+			return '<span title="'.$title.'">'.$output.'...</span>';
+		});
+
+		$list->setColumnLabel('name', 'Kategorie');
+
+		$list->setColumnLabel('postedAt', 'Erstellt am');
+		$list->setColumnFormat('postedAt', 'custom', function ($params) {
+			$list = $params['list'];
+
+			if ($list->getValue('e.postedAt') != "0000-00-00 00:00:00") {
+				return date('d.m.Y', strtotime($list->getValue('e.postedAt')));
 			} else {
 				return 'Ungültige Zeitangabe';
 			}
@@ -202,7 +211,7 @@
 
 
 			// post date
-			$field = $form->addInputField('datetime-local', 'post_date', date('Y-m-d').'T'.date('H:i'));
+			$field = $form->addInputField('datetime-local', 'postedAt', date('Y-m-d').'T'.date('H:i'));
 			$field->setLabel('Post Tag');
 
 
@@ -241,13 +250,13 @@
 		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$type_id);
 
 		// translation table
-		$query = 'SELECT e.`id`,e.`art_id`, l.`name` AS `langname`, e.`headline`, c.`name`, e.`offline` ';
+		$query = 'SELECT e.`id`,e.`aid`, l.`name` AS `langname`, e.`headline`, c.`name`, e.`offline` ';
 		$query .= 'FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'clang` AS l ';
 		$query .= 'ON e.`clang`=l.`id` ';
-		$query .= 'WHERE e.`art_id`='.$type_id.' ';
+		$query .= 'WHERE e.`aid`='.$type_id.' ';
 		$query .= 'ORDER BY e.`id`';
 
 		$list = rex_list::factory($query);
@@ -261,10 +270,19 @@
 		$list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
 		$list->setColumnParams($thIcon, ['func' => 'tedit', 'id' => '###id###', 'parent_id' => $type_id]);
 
-		$list->setColumnLabel('id', 'ID');
-		$list->setColumnLabel('art_id', 'Artikel ID');
+		$list->removeColumn('id');
+		$list->setColumnLabel('aid', 'Nr.');
 		$list->setColumnLabel('langname', 'Sprache');
-		$list->setColumnLabel('headline', 'Headline');
+		$list->setColumnLabel('headline', 'Titel');
+		$list->setColumnFormat('headline', 'custom', function($params) {
+			$list = $params['list'];
+
+			$title = $list->getValue('headline');
+			$output = substr($title, 0, 50);
+
+			return '<span title="'.$title.'">'.$output.'...</span>';
+		});
+
 		$list->setColumnLabel('name', 'Kategorie');
 
 		$list->setColumnLabel('offline', '');
@@ -354,8 +372,8 @@
 
 
 			// post date
-			$myTime = new DateTime($form->getSql()->getValue('post_date'));
-			$field = $form->addInputField('datetime-local', 'post_date', date('Y-m-d', $myTime->getTimestamp()).'T'.date('H:i', $myTime->getTimestamp()));
+			$myTime = new DateTime($form->getSql()->getValue('postedAt'));
+			$field = $form->addInputField('datetime-local', 'postedAt', date('Y-m-d', $myTime->getTimestamp()).'T'.date('H:i', $myTime->getTimestamp()));
 			$field->setLabel('Post Tag');
 
 
@@ -407,7 +425,7 @@
 		echo '<div><p>Übersetzung von "<a href="'.$url.'">'.$parent_sql->getValue('headline').' - ['.$parent_sql->getValue('id').']</a>"</p></div>';
 
 		// article id
-		$form->addHiddenField('art_id', $parent_id);
+		$form->addHiddenField('aid', $parent_id);
 
 		// translation
 		$form->addHiddenField('translation', 1);
@@ -442,8 +460,8 @@
 
 
 			// post date
-			$myTime = new DateTime($parent_sql->getValue('post_date'));
-			$field = $form->addHiddenField('post_date', date('Y-m-d', $myTime->getTimestamp()).'T'.date('H:i', $myTime->getTimestamp()));
+			$myTime = new DateTime($parent_sql->getValue('postedAt'));
+			$field = $form->addHiddenField('postedAt', date('Y-m-d', $myTime->getTimestamp()).'T'.date('H:i', $myTime->getTimestamp()));
 
 
 			// clang
@@ -455,7 +473,7 @@
 
 			$query = 'SELECT * FROM `'.rex::getTablePrefix().'blogger_entries` ';
 			$query .= 'WHERE ';
-			$query .= sprintf('(`id`=%u OR `art_id`=%u) AND `id`!=%u', $parent_id, $parent_id, $type_id);
+			$query .= sprintf('(`id`=%u OR `aid`=%u) AND `id`!=%u', $parent_id, $parent_id, $type_id);
 
 			$clang_sql = rex_sql::factory();
 			$clang_sql->setQuery($query);
@@ -550,7 +568,7 @@
 
 			$query = 'SELECT * FROM `'.rex::getTablePrefix().'blogger_entries` ';
 			$query .= 'WHERE ';
-			$query .= sprintf('(`id`=%u OR `art_id`=%u) AND `id`!=%u', $parent_id, $parent_id, $type_id);
+			$query .= sprintf('(`id`=%u OR `aid`=%u) AND `id`!=%u', $parent_id, $parent_id, $type_id);
 
 			$clang_sql = rex_sql::factory();
 			$clang_sql->setQuery($query);

@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_entries`;
 
 CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `art_id` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `aid` int(11) UNSIGNED NOT NULL DEFAULT 0, -- article id
   `translation` smallint(1) UNSIGNED NOT NULL DEFAULT 0,
   `clang` smallint(5) NOT NULL DEFAULT 1,
   `category` smallint(5) NOT NULL DEFAULT 1,
@@ -12,8 +12,8 @@ CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
   `gallery` text NOT NULL DEFAULT '',
   `tags` text NOT NULL DEFAULT '',
   `offline` smallint(1) NOT NULL DEFAULT 0,
-  `post_date` datetime NOT NULL,
   `postedBy` VARCHAR(255) NOT NULL DEFAULT '',
+  `postedAt` datetime NOT NULL,
   `createdBy` smallint(5) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedBy` smallint(5) NOT NULL,

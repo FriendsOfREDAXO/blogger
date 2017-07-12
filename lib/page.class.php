@@ -57,7 +57,7 @@ class BloggerPage extends BloggerFunc {
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
 		$query .= 'WHERE e.`offline`=0 ';
-		$query .= sprintf('AND (e.`art_id`=%u)', $this->singleEntry);
+		$query .= sprintf('AND (e.`aid`=%u)', $this->singleEntry);
 
 		$sql = rex_sql::factory();
 		$sql->setQuery($query);
@@ -87,7 +87,7 @@ class BloggerPage extends BloggerFunc {
 		$query = 'SELECT
 			e.*,
 			c.`name`,
-			UNIX_TIMESTAMP(e.`post_date`) AS postTimestamp
+			UNIX_TIMESTAMP(e.`postedAt`) AS postTimestamp
 			FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
@@ -95,13 +95,13 @@ class BloggerPage extends BloggerFunc {
 
 		// year without month
 		if ($this->year && !$this->month) {
-			$query .= ' AND (year(e.post_date)='.$this->year.')';
+			$query .= ' AND (year(e.postedAt)='.$this->year.')';
 		}
 
 		// year and month
 		if ($this->year && $this->month) {
-			$query .= ' AND (year(e.post_date)='.$this->year.')';
-			$query .= ' AND (month(e.post_date)='.$this->month.')';
+			$query .= ' AND (year(e.postedAt)='.$this->year.')';
+			$query .= ' AND (month(e.postedAt)='.$this->month.')';
 		}
 
 		// tags
@@ -118,7 +118,7 @@ class BloggerPage extends BloggerFunc {
 		}
 
 		// group distinct
-		$query .= ' GROUP BY(e.`art_id`)';
+		$query .= ' GROUP BY(e.`aid`)';
 
 		// order
 		$query .= ' ORDER BY postTimestamp DESC';
@@ -164,7 +164,7 @@ class BloggerPage extends BloggerFunc {
 		}
 
 		// group distinct
-		$query .= ' GROUP BY(e.`art_id`)';
+		$query .= ' GROUP BY(e.`aid`)';
 
 		$sql = rex_sql::factory();
 		$sql->setQuery($query);

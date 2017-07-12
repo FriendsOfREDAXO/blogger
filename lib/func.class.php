@@ -14,7 +14,7 @@ class BloggerFunc {
 			$entry = new BloggerEntry();
 
 			$entry->setId( $sql->getValue('e.id') );
-			$entry->setArtId( $sql->getValue('e.art_id') );
+			$entry->setArtId( $sql->getValue('e.aid') );
 			$entry->setTranslation( ($sql->getValue('e.translation') == 0) ? false : true );
 			$entry->setClang( $sql->getValue('e.clang') );
 			$entry->setCategory( $sql->getValue('c.name') );
@@ -26,7 +26,7 @@ class BloggerFunc {
 			$entry->setTags( self::getTagsFromValue($sql->getValue('e.tags')) );
 			$entry->setOffline( ($sql->getValue('e.offline') == 0) ? false : true );
 
-			$entry->setPostDate( $sql->getValue('e.post_date') );
+			$entry->setPostDate( $sql->getValue('e.postedAt') );
 
 			$entry->setCreatedBy( $sql->getValue('e.createdBy') );
 			$entry->setCreatedAt( $sql->getValue('e.createdAt') );
@@ -176,8 +176,8 @@ class BloggerFunc {
 
 		$query = ('
 			SELECT DISTINCT
-				month(post_date) AS month,
-				year(post_date) AS year
+				month(postedAt) AS month,
+				year(postedAt) AS year
 			FROM rex_blogger_entries
 				'.$whereStatement.'
 				'.$orderStatement.'
