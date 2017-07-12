@@ -7,8 +7,7 @@ class rex_blogger extends rex_blogger_page {
 	 *
 	 * @param int $art_per_page
 	 */
-	public function __construct($art_per_page=5)
-	{
+	public function __construct($art_per_page=5) {
 		parent::__construct($art_per_page);
 	}
 

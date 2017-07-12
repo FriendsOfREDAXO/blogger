@@ -177,7 +177,7 @@ class rex_blogger_func {
 	 *
 	 * @return array('year'=>STRING, 'month'=>STRING)
 	 */
-	public static function get_all_months($reverse=false, $ignoreOfflines=true)
+	public static function get_all_months($reverse=true, $ignoreOfflines=true)
 	{
 
 		$dates = array();

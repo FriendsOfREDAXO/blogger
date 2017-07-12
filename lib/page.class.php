@@ -9,6 +9,8 @@ class rex_blogger_page extends rex_blogger_func {
 	private $max_page_number;		// int; basically the number of all entries divided by the number of articles per page
 	private $single_entry;			// int; when the user is requesting a single entry this will be the id of said entry
 	private $clang;					// int; holds the clang value
+	private $year;
+	private $month;
 
 	/**
 	 * The constructor sets the limit for entries on each page
@@ -23,6 +25,10 @@ class rex_blogger_page extends rex_blogger_func {
 		$this->set_tags(rex_request('blogger_tags', 'string'));
 		$this->category_id = rex_request('blogger_category', 'int');
 		$this->set_max_page_number();
+
+		// check if date is given
+		$this->year = rex_request('bloggerYear', 'int');
+		$this->month = rex_request('bloggerMonth', 'int');
 
 		$this->single_entry = rex_request('blogger_entry', 'int');
 		$this->clang = rex_clang::getCurrent()->getId() ?: 1;
@@ -91,6 +97,17 @@ class rex_blogger_page extends rex_blogger_func {
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
 		$query .= 'WHERE e.`offline`=0 AND e.`clang`='.rex_clang::getCurrent()->getId();
+
+		// year without month
+		if ($this->year && !$this->month) {
+			$query .= ' AND (year(e.post_date)='.$this->year.')';
+		}
+
+		// year and month
+		if ($this->year && $this->month) {
+			$query .= ' AND (year(e.post_date)='.$this->year.')';
+			$query .= ' AND (month(e.post_date)='.$this->month.')';
+		}
 
 		// tags
 		if (!empty($this->tags)) {
