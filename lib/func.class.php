@@ -1,17 +1,17 @@
 <?php
 
-class rex_blogger_func {
+class BloggerFunc {
 	/**
 	 * Returns an array of rex_blogger_entries as a rex_blogger array from an rex_sql object
 	 *
 	 * @param rex_sql $sql
 	 *
-	 * @return rex_blogger_entry[]
+	 * @return BloggerEntry[]
 	 */
-	protected static function get_by_sql($sql) {
+	protected static function getBySql($sql) {
 		$entries = array();
 		while ($sql->hasNext()) {
-			$entry = new rex_blogger_entry();
+			$entry = new BloggerEntry();
 
 			$entry->setId( $sql->getValue('e.id') );
 			$entry->setArtId( $sql->getValue('e.art_id') );
@@ -23,7 +23,7 @@ class rex_blogger_func {
 			$entry->setContent( $sql->getValue('e.content') );
 			$entry->setGallery( $sql->getValue('e.gallery') );
 
-			$entry->setTags( self::get_tags_from_value($sql->getValue('e.tags')) );
+			$entry->setTags( self::getTagsFromValue($sql->getValue('e.tags')) );
 			$entry->setOffline( ($sql->getValue('e.offline') == 0) ? false : true );
 
 			$entry->setPostDate( $sql->getValue('e.post_date') );
@@ -49,8 +49,7 @@ class rex_blogger_func {
 	 *
 	 * @return String[]
 	 */
-	protected static function get_tags_from_value($string, $delimiter='|') {
-
+	protected static function getTagsFromValue($string, $delimiter='|') {
 		$tags = array();
 		$tmp = array_filter(explode($delimiter, $string));
 
@@ -71,7 +70,6 @@ class rex_blogger_func {
 		}
 
 		return $tags;
-
 	}
 
 
@@ -80,10 +78,9 @@ class rex_blogger_func {
 	 *
 	 * @param int $id
 	 *
-	 * @return rex_blogger_entry
+	 * @return BloggerEntry
 	 */
-	public static function get_by_id($id, $ignoreOfflines=true) {
-
+	public static function getById($id, $ignoreOfflines=true) {
 		$query = 'SELECT e.*, c.`name` FROM `'.rex::getTablePrefix().'blogger_entries` AS e ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'blogger_categories` AS c ';
 		$query .= 'ON e.`category`=c.`id` ';
@@ -96,8 +93,7 @@ class rex_blogger_func {
 		$sql->setQuery($query);
 		$sql->execute();
 
-		return rex_blogger::get_by_sql($sql)[0];
-
+		return rex_blogger::getBySql($sql)[0];
 	}
 
 
@@ -106,9 +102,9 @@ class rex_blogger_func {
 	 *
 	 * @param int $limit
 	 *
-	 * @return rex_blogger_entry[]
+	 * @return BloggerEntry[]
 	 */
-	public static function get_latest_entries($limit=1, $ignoreOfflines=true) {
+	public static function getLatestEntries($limit=1, $ignoreOfflines=true) {
 		// TODO
 		return null;
 	}
@@ -119,8 +115,7 @@ class rex_blogger_func {
 	 *
 	 * @return String[]
 	 */
-	public static function get_tags() {
-
+	public static function getTags() {
 		$tags = array();
 
 		$sql = rex_sql::factory();
@@ -142,8 +137,7 @@ class rex_blogger_func {
 	 *
 	 * @return String[]
 	 */
-	public static function get_categories() {
-
+	public static function getCategories() {
 		$categories = array();
 
 		$sql = rex_sql::factory();
@@ -167,8 +161,7 @@ class rex_blogger_func {
 	 *
 	 * @return array('year'=>STRING, 'month'=>STRING)
 	 */
-	public static function get_all_months($reverse=true, $ignoreOfflines=true) {
-
+	public static function getAllMonths($reverse=true, $ignoreOfflines=true) {
 		$dates = array();
 
 		$whereStatement = '';

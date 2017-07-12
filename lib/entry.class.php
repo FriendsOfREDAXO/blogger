@@ -1,10 +1,10 @@
 <?php
 
-class rex_blogger_entry {
+class BloggerEntry {
 
 	// member variables
 	private $id;			// int
-	private $art_id;		// int
+	private $aid;			// article id //int
 	private $translation;	// boolean
 	private $clang;			// int
 	private $category;		// String
@@ -19,15 +19,14 @@ class rex_blogger_entry {
 	private $createdAt;		// datetime String
 	private $updatedBy;		// int String
 	private $updatedAt; 	// datetime String
-	// member variables
 
 	public function __construct() { }
 
 	public function setId($id) {$this->id = $id;}
 	public function getId() {return $this->id;}
 
-	public function setArtId($artId) {$this->art_id = $artId;}
-	public function getArtId() {return $this->art_id;}
+	public function setArtId($artId) {$this->aid = $artId;}
+	public function getArtId() {return $this->aid;}
 
 	public function setTranslation($translation) {$this->translation = $translation;}
 	public function getTranslation() {return $this->translation;}

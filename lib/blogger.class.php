@@ -1,14 +1,14 @@
 <?php
 
-class rex_blogger extends rex_blogger_page {
+class Blogger extends BloggerPage {
 
 	/**
-	 * Creates and returns a new rex_blogger object
+	 * Creates and returns a new Blogger object
 	 *
-	 * @param int $art_per_page
+	 * @param int $articlesPerPage
 	 */
-	public function __construct($art_per_page=5) {
-		parent::__construct($art_per_page);
+	public function __construct($articlesPerPage=5) {
+		parent::__construct($articlesPerPage);
 	}
 
 }
