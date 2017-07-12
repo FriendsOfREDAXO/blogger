@@ -4,6 +4,7 @@
 	$type_id = rex_request('type_id', 'int') ?: rex_request('id', 'int');
 	$parent_id = rex_request('parent_id', 'int');
 
+	$beBlogger = new Blogger\BeBlogger();
 
 	if (!empty($_POST)) {
 		$edited = reset($_POST);

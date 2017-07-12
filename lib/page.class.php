@@ -1,5 +1,10 @@
 <?php
 
+// TODO
+// - find out how namespaces work
+use core;
+namespace Blogger;
+
 class BloggerPage extends BloggerFunc {
 	private $currentPage;			// int; number of current page
 	private $articlesPerPage;		// int; number of articles that are shown per page
