@@ -1,7 +1,6 @@
 <?php
 
 class rex_blogger_page extends rex_blogger_func {
-
 	private $current_page;			// int; number of current page
 	private $articles_per_page;		// int; number of articles that are shown per page
 	private $tags;					// int[]; searched tags
