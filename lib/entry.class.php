@@ -73,7 +73,7 @@ class BloggerEntry {
 
 	public function getUrl() {
 		$char = (rex_addon::exists('yrewrite')) ? '?' : '&';
-		return rex_article::getCurrent()->getUrl().$char.'blogger_entry='.$this->id;
+		return rex_article::getCurrent()->getUrl().$char.'bloggerEntry='.$this->id;
 	}
 
 }
