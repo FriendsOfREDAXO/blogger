@@ -224,29 +224,27 @@ class BloggerPage extends BloggerFunc {
 		if ($nextPageNr > $this->maxPageNumber)
 			return null;
 
+		// default values
+		$currentTags = '';
+		$currentCategory = '';
+		$currentYear = '';
+		$currentMonth = '';
+
 		// tags
 		if ($this->tags[0] != '')
 			$currentTags = '&bloggerTags='.implode(',', $this->tags);
-		else
-			$currentTags = '';
 
 		// category
 		if ($this->categoryId)
 			$currentCategory = '&bloggerCategory='.$this->categoryId;
-		else
-			$currentCategory = '';
 
 		// year
 		if ($this->year)
 			$currentYear = '&bloggerYear='.$this->year;
-		else
-			$currentYear = '';
 
 		// month
 		if ($this->month)
 			$currentMonth = '&bloggerMonth='.$this->month;
-		else
-			$currentMonth = '';
 
 		$char = (rex_addon::exists('yrewrite')) ? '?' : '&';
 
