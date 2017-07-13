@@ -25,8 +25,8 @@ In work...
   * category
   * tags
   * status
-  * postedAt
   * postedBy
+  * postedAt
 * rex_blogger_content
   * id
   * pid
@@ -38,6 +38,10 @@ In work...
 * rex_blogger_categories
   * id
   * name
+  * createdBy
+  * createdAt
 * rex_blogger_tags
   * id
   * tag
+  * createdBy
+  * createdAt

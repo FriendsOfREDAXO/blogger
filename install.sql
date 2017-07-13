@@ -2,24 +2,28 @@ DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_entries`;
 
 CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `aid` int(11) UNSIGNED NOT NULL DEFAULT 0, -- article id
-  `translation` smallint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `clang` smallint(5) NOT NULL DEFAULT 1,
-  `category` smallint(5) NOT NULL DEFAULT 1,
-  `preview` varchar(1024) NOT NULL DEFAULT '',
-  `headline` varchar(1024) NOT NULL DEFAULT '',
-  `content` text NOT NULL DEFAULT '',
-  `gallery` text NOT NULL DEFAULT '',
+  `category` int(11) NOT NULL DEFAULT 1,
   `tags` text NOT NULL DEFAULT '',
-  `offline` smallint(1) NOT NULL DEFAULT 0,
+  `status` smallint(1) NOT NULL DEFAULT 0,
   `postedBy` VARCHAR(255) NOT NULL DEFAULT '',
   `postedAt` datetime NOT NULL,
-  `createdBy` smallint(5) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedBy` smallint(5) NOT NULL,
-  `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_content`;
+
+CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `pid` int(11) UNSIGNED NOT NULL DEFAULT 0, -- parent id
+  `clang` smallint(5) NOT NULL DEFAULT 1,
+  `title` varchar(1024) NOT NULL DEFAULT '',
+  `text` text NOT NULL DEFAULT '',
+  `preview` varchar(1024) NOT NULL DEFAULT '',
+  `gallery` text NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_categories`;
 
