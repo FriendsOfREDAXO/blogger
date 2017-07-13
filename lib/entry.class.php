@@ -1,7 +1,5 @@
 <?php
 
-namespace Blogger;
-
 class BloggerEntry {
 
 	// member variables

@@ -1,6 +1,6 @@
 <?php
 
-class Blogger extends Blogger\BloggerPage {
+class Blogger extends BloggerPage {
 
 	/**
 	 * Creates and returns a new Blogger object

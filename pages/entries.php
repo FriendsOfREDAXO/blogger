@@ -1,18 +1,37 @@
 <?php
 
+	$id = rex_request('aid', 'int') ?: rex_request('id', 'int');
+	$pid = rex_request('pid', 'int');
 	$func = rex_request('func', 'string');
-	$type_id = rex_request('type_id', 'int') ?: rex_request('id', 'int');
-	$parent_id = rex_request('parent_id', 'int');
 
-	$beBlogger = new Blogger\BeBlogger();
+	$beBlogger = new BeBlogger();
+	$beBlogger->handleRequest();
+
+	$beBlogger->getPage();
+
+
+	/**
+	 * this block will ensure that every new entry will receive
+	 * the same aid as their id
+	 *
+	 * for children it will ensure that they get the same
+	 * aid as their parents
+	 */
 
 	if (!empty($_POST)) {
+		// something was posted
+
+		// get posted elements,
+		// which are "somewhere" in $_POST
 		$edited = reset($_POST);
+
+		// only if something was edited
+		// ensure that meta data will be used for every lang
 		if ($func == 'edit') {
 			try {
 				$updateSql = rex_sql::factory();
 				$updateSql->setTable(rex::getTablePrefix().'blogger_entries');
-				$updateSql->setWhere(['aid'=>$type_id]);
+				$updateSql->setWhere(['aid'=>$id]);
 				$updateSql->setValues([
 					'category'=>$edited['category'],
 					'tags'=>"|".implode('|', $edited['tags'])."|",
@@ -23,7 +42,9 @@
 				echo $e;
 			}
 		}
+
 	} elseif (isset($_GET['list']) && isset($_GET['form']) && $func == '') {
+
 		try {
 			$query = 'UPDATE `'.rex::getTablePrefix().'blogger_entries` ';
 			$query .= 'SET `aid` = `id` ';
@@ -35,41 +56,10 @@
 		} catch (rex_sql_exception $e) {
 			echo $e;
 		}
-	}
-
-
-	if ($func == 'offline') {
-
-		$sql = rex_sql::factory();
-		$sql->setTable(rex::getTablePrefix() . 'blogger_entries');
-		$sql->setWhere(sprintf('`id`=%u OR `aid`=%u', $type_id, $type_id));
-		$sql->setValues(array("offline"=>"1"));
-
-		try {
-			$sql->update();
-		} catch (rex_sql_exception $e) {
-			echo $e;
-		}
-
-		$func = '';
 
 	}
 
-	if ($func == 'online') {
 
-		$sql = rex_sql::factory();
-		$sql->setTable(rex::getTablePrefix() . 'blogger_entries');
-		$sql->setWhere(sprintf('`id`=%u OR `aid`=%u', $type_id, $type_id));
-		$sql->setValues(array("offline"=>"0"));
-
-		try {
-			$sql->update();
-		} catch (rex_sql_exception $e) {
-			echo $e;
-		}
-
-		$func = '';
-	}
 
 	if ($func == '') {
 		/**
@@ -125,10 +115,10 @@
 
 	        if ($list->getValue('e.offline') == "1") {
 	        	$list->addLinkAttribute('offline', 'class', 'rex-offline');
-	            return $list->getColumnLink('offline', '<i class="rex-icon rex-icon-offline"></i>&nbsp;offline', ['type_id' => '###id###', 'func' => 'online']);
+	            return $list->getColumnLink('offline', '<i class="rex-icon rex-icon-offline"></i>&nbsp;offline', ['id' => '###id###', 'func' => 'online']);
 	        } else {
 	        	$list->addLinkAttribute('offline', 'class', 'rex-online');
-	        	return $list->getColumnLink('offline', '<i class="rex-icon rex-icon-online"></i>&nbsp;online', ['type_id' => '###id###', 'func' => 'offline']);
+	        	return $list->getColumnLink('offline', '<i class="rex-icon rex-icon-online"></i>&nbsp;online', ['id' => '###id###', 'func' => 'offline']);
 	        }
 
 	    });
@@ -147,7 +137,7 @@
 		 * ADD
 		 */
 		$formLabel = 'Neuen Eintrag erstellen';
-		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$type_id);
+		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$id);
 
 		// form
 			// category
@@ -248,7 +238,7 @@
 		 * EDIT
 		 */
 		$formLabel = 'Eintrag bearbeiten';
-		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$type_id);
+		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$id);
 
 		// translation table
 		$query = 'SELECT e.`id`,e.`aid`, l.`name` AS `langname`, e.`headline`, c.`name`, e.`offline` ';
@@ -257,7 +247,7 @@
 		$query .= 'ON e.`category`=c.`id` ';
 		$query .= 'LEFT JOIN `'.rex::getTablePrefix().'clang` AS l ';
 		$query .= 'ON e.`clang`=l.`id` ';
-		$query .= 'WHERE e.`aid`='.$type_id.' ';
+		$query .= 'WHERE e.`aid`='.$id.' ';
 		$query .= 'ORDER BY e.`id`';
 
 		$list = rex_list::factory($query);
@@ -265,11 +255,11 @@
 		$list->addTableAttribute('class', 'table-striped');
 		$list->setNoRowsMessage('Es wurden keine Einträge gefunden');
 
-		$thIcon = '<a href="'.$list->getUrl(['func' => 'tadd', 'parent_id' => $type_id]).'"><i class="rex-icon rex-icon-add-action"></i></a>';
+		$thIcon = '<a href="'.$list->getUrl(['func' => 'tadd', 'pid' => $id]).'"><i class="rex-icon rex-icon-add-action"></i></a>';
 		$tdIcon = '<i class="rex-icon fa-file-text-o"></i>';
 
 		$list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-		$list->setColumnParams($thIcon, ['func' => 'tedit', 'id' => '###id###', 'parent_id' => $type_id]);
+		$list->setColumnParams($thIcon, ['func' => 'tedit', 'id' => '###id###', 'pid' => $id]);
 
 		$list->removeColumn('id');
 		$list->setColumnLabel('aid', 'Nr.');
@@ -395,7 +385,7 @@
 		$form->addHiddenField('updatedBy', rex::getUser()->getId());
 
 		// end
-		$form->addParam('id', $type_id);
+		$form->addParam('id', $id);
 
 		// output
 		$content = $form->get();
@@ -413,12 +403,12 @@
 		 * TADD
 		 */
 		$formLabel = 'Neue Übersetzung';
-		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$type_id);
+		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$id);
 
 		// parent
 		$parent_sql = rex_sql::factory();
 		$parent_sql->setTable(rex::getTablePrefix().'blogger_entries');
-		$parent_sql->setWhere(['id' => $parent_id]);
+		$parent_sql->setWhere(['id' => $pid]);
 		$parent_sql->select();
 
 		// translation info message
@@ -426,7 +416,7 @@
 		echo '<div><p>Übersetzung von "<a href="'.$url.'">'.$parent_sql->getValue('headline').' - ['.$parent_sql->getValue('id').']</a>"</p></div>';
 
 		// article id
-		$form->addHiddenField('aid', $parent_id);
+		$form->addHiddenField('aid', $pid);
 
 		// translation
 		$form->addHiddenField('translation', 1);
@@ -474,7 +464,7 @@
 
 			$query = 'SELECT * FROM `'.rex::getTablePrefix().'blogger_entries` ';
 			$query .= 'WHERE ';
-			$query .= sprintf('(`id`=%u OR `aid`=%u) AND `id`!=%u', $parent_id, $parent_id, $type_id);
+			$query .= sprintf('(`id`=%u OR `aid`=%u) AND `id`!=%u', $pid, $pid, $id);
 
 			$clang_sql = rex_sql::factory();
 			$clang_sql->setQuery($query);
@@ -527,12 +517,12 @@
 		 * TEDIT
 		 */
 		$formLabel = 'Übersetzung bearbeiten';
-		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$type_id);
+		$form = rex_form::factory(rex::getTablePrefix().'blogger_entries', '', 'id='.$id);
 
 		// parent
 		$parent_sql = rex_sql::factory();
 		$parent_sql->setTable(rex::getTablePrefix().'blogger_entries');
-		$parent_sql->setWhere(['id' => $parent_id]);
+		$parent_sql->setWhere(['id' => $pid]);
 		$parent_sql->select();
 
 		// translation info message
@@ -569,7 +559,7 @@
 
 			$query = 'SELECT * FROM `'.rex::getTablePrefix().'blogger_entries` ';
 			$query .= 'WHERE ';
-			$query .= sprintf('(`id`=%u OR `aid`=%u) AND `id`!=%u', $parent_id, $parent_id, $type_id);
+			$query .= sprintf('(`id`=%u OR `aid`=%u) AND `id`!=%u', $pid, $pid, $id);
 
 			$clang_sql = rex_sql::factory();
 			$clang_sql->setQuery($query);
@@ -607,7 +597,7 @@
 		$form->addHiddenField('updatedBy', rex::getUser()->getId());
 
 		// end
-		$form->addParam('id', $type_id);
+		$form->addParam('id', $id);
 
 		// output
 		$content = $form->get();

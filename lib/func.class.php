@@ -1,7 +1,5 @@
 <?php
 
-namespace Blogger;
-
 class BloggerFunc {
 	/**
 	 * Returns an array of rex_blogger_entries as a rex_blogger array from an rex_sql object
