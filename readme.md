@@ -2,26 +2,29 @@
 
 Not production ready.
 
+
 ## TODOS
 
 * Restructure database and how it is accessed
 * Own class for the Backend Pages
 
+
 ## Usage
 
+Coming soon...
 
 
-### Database structure
+## How it Works
 
+In work...
 
-#### Tables
+### Database Tables
 
 * rex_blogger_entries
   * id
   * category
   * tags
   * status
-  * content
   * postedAt
   * postedBy
 * rex_blogger_content
