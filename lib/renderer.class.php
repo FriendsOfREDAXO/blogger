@@ -65,7 +65,7 @@ class BloggerRenderer extends BloggerForms {
    * renders add & edit forms
    *
    */
-  public function renderEditPage() {
+  public function renderEditPageDep() {
     // $query = ('
     //   rex_blogger_content AS cont
 
@@ -73,8 +73,8 @@ class BloggerRenderer extends BloggerForms {
     //     ON cont.pid=entry.id
     // ');
     $query = ('
-      `rex_blogger_content` AS cont,
-      `rex_blogger_entries` AS entry
+      rex_blogger_content AS cont,
+      rex_blogger_entries AS entry
     ');
 
     $where = ('
@@ -103,6 +103,33 @@ class BloggerRenderer extends BloggerForms {
     $fragment->setVar('body', $content, false);
 
     $content = $fragment->parse('core/page/section.php');
+    return $content;
+  }
+
+  public function renderEditPage() {
+
+    $form1 = rex_form::factory('rex_blogger_entries', '', 'id='.$this->pid, 'post', true);
+    $form2 = rex_form::factory('rex_blogger_content', '', 'id='.$this->id, 'post', true);
+
+    if ($this->func === "edit") {
+      $form1->addParam('id', $this->id);
+      $form1->addParam('pid', $this->pid);
+      $form2->addParam('id', $this->id);
+      $form2->addParam('pid', $this->pid);
+    }
+
+    $this->addMetaFields($form1);
+    $this->addContentFields($form2);
+
+    $content = $form1->get();
+    $content .= $form2->get();
+
+    // TODO
+    // - get names of both forms
+    // - create own form with names
+    // - make own buttons with save, apply and delete
+    // - create post save, apply, delete var server sided to check what button was clicked
+
     return $content;
   }
 }
