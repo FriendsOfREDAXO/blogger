@@ -13,9 +13,9 @@ CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
 
 DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_content`;
 
-CREATE TABLE `%TABLE_PREFIX%blogger_entries` (
+CREATE TABLE `%TABLE_PREFIX%blogger_content` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `pid` int(11) UNSIGNED NOT NULL DEFAULT 0, -- parent id
+  `pid` int(11) UNSIGNED NOT NULL DEFAULT 0,
   `clang` smallint(5) NOT NULL DEFAULT 1,
   `title` varchar(1024) NOT NULL DEFAULT '',
   `text` text NOT NULL DEFAULT '',

@@ -12,13 +12,28 @@
 	echo $beBlogger->getPage();
 
 
+	/**
+	 * this block will ensure that every new entry will receive
+	 * the same aid as their id
+	 *
+	 * for children it will ensure that they get the same
+	 * aid as their parents
+	 */
+
 	if (!empty($_POST)) {
+		// something was posted
+
+		// get posted elements,
+		// which are "somewhere" in $_POST
 		$edited = reset($_POST);
+
+		// only if something was edited
+		// ensure that meta data will be used for every lang
 		if ($func == 'edit') {
 			try {
 				$updateSql = rex_sql::factory();
 				$updateSql->setTable(rex::getTablePrefix().'blogger_entries');
-				$updateSql->setWhere(['aid'=>$type_id]);
+				$updateSql->setWhere(['aid'=>$id]);
 				$updateSql->setValues([
 					'category'=>$edited['category'],
 					'tags'=>"|".implode('|', $edited['tags'])."|",
@@ -29,7 +44,9 @@
 				echo $e;
 			}
 		}
+
 	} elseif (isset($_GET['list']) && isset($_GET['form']) && $func == '') {
+
 		try {
 			$query = 'UPDATE `'.rex::getTablePrefix().'blogger_entries` ';
 			$query .= 'SET `aid` = `id` ';
@@ -41,8 +58,8 @@
 		} catch (rex_sql_exception $e) {
 			echo $e;
 		}
-	}
 
+	}
 
 	if ($func == 'offline') {
 
