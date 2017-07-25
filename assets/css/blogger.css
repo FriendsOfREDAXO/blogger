@@ -1,0 +1,15 @@
+form.blogger-form {
+
+}
+
+form.blogger-form hr {
+  border-color: rgba(0,0,0,.6);
+}
+
+.blogger-content-areas section.hidden {
+  display: none;
+}
+
+.blogger-content-areas section.active {
+  display: block;
+}

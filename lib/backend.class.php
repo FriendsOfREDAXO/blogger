@@ -69,12 +69,17 @@ class BeBlogger {
 class BeForms {
   static public function genForm() {
     $content = '';
+    $contentAreas = '';
 
     $content .= Self::genMetaSection();
     $content .= Self::genLangListSection();
-    $content .= Self::genContentSection();
 
-    $content = '<form>'.$content.'</form>';
+    foreach (rex_clang::getAllIds() as $clang) {
+      $contentAreas .= Self::genContentSection($clang);
+    }
+    $content .= '<section class="blogger-content-areas">'.$contentAreas.'</section>';
+
+    $content = '<form class="blogger-form">'.$content.'</form>';
     return $content;
   }
 
@@ -136,16 +141,17 @@ class BeForms {
 
     foreach($list as $item) {
       $content .= ($item->getId() == $clang)
-        ? '<button class="btn btn-primary">'
-        : '<button class="btn">';
-
+        ? '<button class="btn btn-primary"'
+        : '<button class="btn"';
+      
+      $content .= ' data-clang="'.$item->getId().'">';
       $content .= $item->getName().'</button>';
     }
 
     return '<section>'.$content.'</section><hr />';
   }
 
-  static protected function genContentSection() {
+  static protected function genContentSection($clang) {
     $title = new rex_form_element('input');
     $title->setLabel('Title');
     $title->setAttribute('class', 'form-control');
@@ -166,7 +172,11 @@ class BeForms {
     $content .= $preview->get();
     $content .= $gallery->get();
 
-    return '<section>'.$content.'</section><hr />';
+    $className = $clang == rex_clang::getCurrentId()
+      ? ' class="active" data-clang="'.$clang.'"'
+      : ' class="hidden" data-clang="'.$clang.'"';
+
+    return '<section'.$className.'>'.$content.'</section>';
   }
 
   static public function genList($query) {
