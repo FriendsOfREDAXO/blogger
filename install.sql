@@ -30,8 +30,6 @@ DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_categories`;
 CREATE TABLE `%TABLE_PREFIX%blogger_categories` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
-  `createdBy` smallint(5) NOT NULL,
-  `createdAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -43,8 +41,6 @@ DROP TABLE IF EXISTS `%TABLE_PREFIX%blogger_tags`;
 CREATE TABLE `%TABLE_PREFIX%blogger_tags` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `tag` varchar(256) NOT NULL DEFAULT '',
-  `createdBy` smallint(5) NOT NULL,
-  `createdAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

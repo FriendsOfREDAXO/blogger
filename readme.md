@@ -20,6 +20,8 @@ In work...
 
 ### Database Tables
 
+`rex_blogger_entries` contains the meta-data for any entry
+
 * rex_blogger_entries
   * id
   * category
@@ -27,6 +29,9 @@ In work...
   * status
   * postedBy
   * postedAt
+
+`rex_blogger_content` contains the content for each entry in diffrent languages
+
 * rex_blogger_content
   * id
   * pid
@@ -35,13 +40,15 @@ In work...
   * text
   * preview
   * gallery
+
+categories every entry can have
+
 * rex_blogger_categories
   * id
   * name
-  * createdBy
-  * createdAt
+
+tags every entry can have
+
 * rex_blogger_tags
   * id
   * tag
-  * createdBy
-  * createdAt

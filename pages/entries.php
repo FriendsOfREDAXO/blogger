@@ -1,6 +1,8 @@
 <?php
 	$beBlogger = new BeBlogger();
-	$beBlogger->handleRequest();
+
+  dump($_SERVER['REQUEST_METHOD']);
+  dump($_GET ?: $_POST);
 
 	echo $beBlogger->getPage();
 ?>
