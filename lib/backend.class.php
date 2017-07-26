@@ -30,6 +30,10 @@ class BeBlogger {
   private function preHandle() {
     $isStatusUpdate = ($this->func === 'online' || $this->func === 'offline');
     $isEntryUpdate = ($_SERVER['REQUEST_METHOD'] === 'POST');
+
+    if ($isEntryUpdate) {
+
+    }
   }
 
   private function getList() {
@@ -58,32 +62,69 @@ class BeBlogger {
   }
 
   private function getForm() {
-    $query = ("
-
-    ");
-
-    return BeForms::genForm();
+    $beforms = new BeForms($this->func, $this->pid);
+    return $beforms->genForm();
   }
 }
 
 class BeForms {
-  static public function genForm() {
+  private $func;
+  private $pid;
+  private $hash;
+  private $name;
+
+  public function __construct($func, $pid) {
+    $this->func = $func;
+    $this->pid = $pid;
+    $this->hash = md5($this->pid);
+    $this->name = 'blogger['.$this->hash.']';
+  }
+
+  public function genForm() {
+    $pid = $this->pid;
+    $func = $this->func;
+
     $content = '';
     $contentAreas = '';
 
-    $content .= Self::genMetaSection();
-    $content .= Self::genLangListSection();
+    $content .= $this->genHiddenFields();
+    $content .= $this->genMetaSection();
+    $content .= $this->genLangListSection();
 
     foreach (rex_clang::getAllIds() as $clang) {
-      $contentAreas .= Self::genContentSection($clang);
+      $contentAreas .= $this->genContentSection($clang);
     }
-    $content .= '<section class="blogger-content-areas">'.$contentAreas.'</section>';
 
-    $content = '<form class="blogger-form">'.$content.'</form>';
+    $content .= '<section class="blogger-content-areas">'.$contentAreas.'</section>';
+    $content .= $this->genButtons();
+
+    $action = 'index.php?page=blogger/entries&func='.$func.'&pid='.$pid;
+    $content = ('
+      <form class="blogger-form" method="POST" action="'.$action.'" enctype="multipart/form-data">
+        '.$content.'
+      </form>
+    ');
     return $content;
   }
 
-  static protected function genMetaSection() {
+  private function genHiddenFields() {
+    return '<input type="hidden" name="'.$this->name.'[pid]" value="'.$this->pid.'">';
+  }
+
+  private function genButtons() {
+    return ('
+      <hr />
+      <div class="btn-toolbar">
+        <button name="'.$this->name.'[action]" value="save" class="btn btn-save">Save</button>
+        <button name="'.$this->name.'[action]" value="apply" class="btn btn-apply">Apply</button>
+        <button name="'.$this->name.'[action]" value="delete" class="btn btn-delete">Delete</button>
+        <button name="'.$this->name.'[action]" value="abort" class="btn btn-abort">Abort</button>
+      </div>
+      <hr />
+    ');
+  }
+
+  private function genMetaSection() {
     $catSelect = new rex_select();
     $tagSql = rex_sql::factory();
     $tagSql->setQuery("SELECT * FROM rex_blogger_categories");
@@ -96,6 +137,7 @@ class BeForms {
 
     $category = new rex_form_select_element('select');
     $category->setLabel('Category');
+    $category->setAttribute('name', $this->name.'[meta][category]');
     $category->setAttribute('class', 'form-control');
     $category->setSelect($catSelect);
 
@@ -111,15 +153,18 @@ class BeForms {
 
     $tags = new rex_form_select_element('select');
     $tags->setLabel('Tags');
+    $tags->setAttribute('name', $this->name.'[meta][tags]');
     $tags->setAttribute('class', 'form-control');
     $tags->setSelect($tagSelect);
 
     $postedBy = new rex_form_element('input');
     $postedBy->setLabel('Author');
+    $postedBy->setAttribute('name', $this->name.'[meta][postedBy]');
     $postedBy->setAttribute('class', 'form-control');
 
     $postedAt = new rex_form_element('input');
     $postedAt->setLabel('Publish Day');
+    $postedAt->setAttribute('name', $this->name.'[meta][postedAt]');
     $postedAt->setAttribute('class', 'form-control');
 
 
@@ -132,7 +177,7 @@ class BeForms {
     return '<section>'.$content.'</section><hr />';
   }
 
-  static protected function genLangListSection() {
+  private function genLangListSection() {
     $list = rex_clang::getAll(true);
     $clang = rex_clang::getCurrentId();
 
@@ -148,22 +193,26 @@ class BeForms {
       $content .= $item->getName().'</button>';
     }
 
-    return '<section>'.$content.'</section><hr />';
+    return '<section class="lang-list">'.$content.'</section><hr />';
   }
 
-  static protected function genContentSection($clang) {
+  private function genContentSection($clang) {
     $title = new rex_form_element('input');
     $title->setLabel('Title');
+    $title->setAttribute('name', $this->name.'[content]['.$clang.'][title]');
     $title->setAttribute('class', 'form-control');
 
     $text = new rex_form_element('textarea', null, [], true);
     $text->setLabel('Text');
+    $text->setAttribute('name', $this->name.'[content]['.$clang.'][title]');
     $text->setAttribute('class', 'form-control');
 
     $preview = new rex_form_widget_media_element('input');
+    $preview->setAttribute('name', $this->name.'[content]['.$clang.'][preview]');
     $preview->setLabel('Preview');
 
     $gallery = new rex_form_widget_medialist_element('select');
+    $gallery->setAttribute('name', $this->name.'[content]['.$clang.'][gallery]');
     $gallery->setLabel('Gallery');
 
     $content = '';
