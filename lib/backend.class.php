@@ -29,10 +29,14 @@ class BeBlogger {
 
   private function preHandle() {
     $isStatusUpdate = ($this->func === 'online' || $this->func === 'offline');
-    $isEntryUpdate = ($_SERVER['REQUEST_METHOD'] === 'POST');
+    $isEntryUpdate = ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['blogger']);
 
     if ($isEntryUpdate) {
+      // save, update, create database
+    }
 
+    if ($isStatusUpdate) {
+      // update database
     }
   }
 
