@@ -32,9 +32,24 @@ class BeBlogger {
     if ($isEntryUpdate) {
       // save, update, create table
       $hash = md5($this->pid);  // what if pid is not in GET?
-
       $data = $_POST['blogger'][$hash];
       $formPid = $data['pid'];
+
+      if ($data['action'] === 'abort') {
+        $this->func = '';
+        return;
+      }
+
+      if ($data['action'] === 'delete') {
+        $this->deleteEntry($formPid);
+        $this->func = '';
+        return;
+      }
+
+      if ($data['action'] === 'save') {
+        $this->func = '';
+      }
+
       $metaData = $data['meta'];
       $content = $data['content'];
 
@@ -47,6 +62,14 @@ class BeBlogger {
     if ($isStatusUpdate) {
       // update database
     }
+  }
+
+  private function deleteEntry($pid) {
+    $query = 'DELETE FROM rex_blogger_entries WHERE id="'.$pid.'"; ';
+    $query .= 'DELETE FROM rex_blogger_content WHERE pid="'.$pid.'"';
+
+    $sql = rex_sql::factory();
+    $sql->setQuery($query);
   }
 
   private function updateMeta($id, $data) {
