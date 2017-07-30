@@ -56,7 +56,7 @@ class BeBlogger {
       $set['category'] = $data['category'];
 
     if ($data['tags'])
-      $set['tags'] = $data['tags'];
+      $set['tags'] = implode('|', $data['tags']);
 
     if ($data['postedby'])
       $set['postedBy'] = $data['postedby'];
@@ -199,6 +199,7 @@ class BeForms {
     $category->setSelect($catSelect);
 
     $tagSelect = new rex_select();
+    $tagSelect->setMultiple();
     $tagSql = rex_sql::factory();
     $tagSql->setQuery("SELECT * FROM rex_blogger_tags");
     while($tagSql->hasNext()) {
@@ -231,7 +232,9 @@ class BeForms {
       $sql->select();
 
       $category->setValue($sql->getValue('category'));
-      $tags->setValue($sql->getValue('tags'));
+      foreach(explode('|', $sql->getValue('tags')) as $selected) {
+        $tagSelect->setSelected($selected);
+      }
       $postedBy->setValue($sql->getValue('postedBy'));
       $postedAt->setValue($sql->getValue('postedAt'));
     }
