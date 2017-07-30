@@ -85,8 +85,54 @@ class BloggerApi {
   }
 
   public static function create($data) {
+    $metaSet['category'] = $data['meta']['category'];
+    if ($data['meta']['tags'])
+      $metaSet['tags'] = implode('|', $data['meta']['tags']);
 
+    if ($data['meta']['postedby'])
+      $metaSet['postedBy'] = $data['meta']['postedby'];
+
+    if ($data['meta']['postedat'])
+      $metaSet['postedAt'] = $data['meta']['postedat'];
+
+    $sql = rex_sql::factory();
+    $sql->setTable('rex_blogger_entries');
+    $sql->setValues($metaSet);
+    $sql->insert();
+
+    $pid = $sql->getLastId();
+
+    foreach ($data['content'] as $clang => $content) {
+      self::createContent($pid, $clang, $content);
+    }
+
+    return $pid;
   }
+
+  public static function createContent($pid, $clang, $content) {
+    $contentSet = [];
+
+    $contentSet['pid'] = $pid;
+    $contentSet['clang'] = $clang;
+
+    if ($content['title'])
+      $contentSet['title'] = $content['title'];
+
+    if ($content['text'])
+      $contentSet['text'] = $content['text'];
+
+    if ($content['preview'])
+      $contentSet['preview'] = $content['preview'];
+
+    if ($content['gallery'])
+      $contentSet['gallery'] = $content['gallery'];
+
+    $sql = rex_sql::factory();
+    $sql->setTable('rex_blogger_content');
+    $sql->setValues($contentSet);
+    $sql->insert();
+  }
+
 }
 
 ?>

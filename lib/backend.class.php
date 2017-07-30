@@ -33,9 +33,8 @@ class BeBlogger {
     if ($isEntryCreate) {
       $hash = md5(0);
       $data = $_POST['blogger'][$hash];
-      $return = BloggerApi::create($data);
-      dump($return);
-      $this->func === '';
+      $this->pid = BloggerApi::create($data);
+      $this->func === 'edit';
       return;
     }
 
@@ -84,9 +83,9 @@ class BeBlogger {
         category.name,
         entry.postedAt
       FROM rex_blogger_entries AS entry
-      LEFT JOIN rex_blogger_content AS content
+      JOIN rex_blogger_content AS content
         ON entry.id=content.pid
-      LEFT JOIN rex_blogger_categories AS category
+      JOIN rex_blogger_categories AS category
         ON entry.category=category.id
       WHERE content.clang=".$clang."
     ");
@@ -150,6 +149,17 @@ class BeForms {
   }
 
   private function genButtons() {
+    if ($this->pid === 0) {
+      return ('
+        <hr />
+        <div class="btn-toolbar">
+          <button name="'.$this->name.'[action]" value="save" class="btn btn-save">Create</button>
+          <button name="'.$this->name.'[action]" value="abort" class="btn btn-abort">Abort</button>
+        </div>
+        <hr />
+      ');
+    }
+
     return ('
       <hr />
       <div class="btn-toolbar">
