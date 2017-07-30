@@ -5,12 +5,10 @@
  * for the configuration, editing and creating
  */
 class BeBlogger {
-  private $id;
   private $pid;
   private $func;
 
   public function __construct() {
-    $this->id = rex_request('id', 'int');
     $this->pid = rex_request('pid', 'int');
     $this->func = rex_request('func', 'string');
 
@@ -28,16 +26,71 @@ class BeBlogger {
   }
 
   private function preHandle() {
-    $isStatusUpdate = ($this->func === 'online' || $this->func === 'offline');
     $isEntryUpdate = ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['blogger']);
+    $isStatusUpdate = ($this->func === 'online' || $this->func === 'offline');
 
     if ($isEntryUpdate) {
-      // save, update, create database
+      // save, update, create table
+      $hash = md5($this->pid);  // what if pid is not in GET?
+
+      $data = $_POST['blogger'][$hash];
+      $formPid = $data['pid'];
+      $metaData = $data['meta'];
+      $content = $data['content'];
+
+      $this->updateMeta($formPid, $metaData);
+      foreach($content as $clang => $content) {
+        $this->updateEntry($formPid, $clang, $content);
+      }
     }
 
     if ($isStatusUpdate) {
       // update database
     }
+  }
+
+  private function updateMeta($id, $data) {
+    $set = [];
+
+    if ($data['category'])
+      $set['category'] = $data['category'];
+
+    if ($data['tags'])
+      $set['tags'] = $data['tags'];
+
+    if ($data['postedby'])
+      $set['postedBy'] = $data['postedby'];
+
+    if ($data['postedat'])
+      $set['postedAt'] = $data['postedat'];
+
+    $sql = rex_sql::factory();
+    $sql->setTable('rex_blogger_entries');
+    $sql->setValues($set);
+    $sql->setWhere('id='.$id);
+    $sql->update();
+  }
+
+  private function updateEntry($id, $clang, $data) {
+    $set = [];
+
+    if ($data['title'])
+      $set['title'] = $data['title'];
+
+    if ($data['preview'])
+      $set['preview'] = $data['preview'];
+
+    if ($data['gallery'])
+      $set['gallery'] = $data['gallery'];
+
+    if ($data['text'])
+      $set['text'] = $data['text'];
+
+    $sql = rex_sql::factory();
+    $sql->setTable('rex_blogger_content');
+    $sql->setValues($set);
+    $sql->setWhere('pid='.$id.' AND clang='.$clang);
+    $sql->update();
   }
 
   private function getList() {
@@ -130,13 +183,13 @@ class BeForms {
 
   private function genMetaSection() {
     $catSelect = new rex_select();
-    $tagSql = rex_sql::factory();
-    $tagSql->setQuery("SELECT * FROM rex_blogger_categories");
-    while($tagSql->hasNext()) {
-      $name = $tagSql->getValue('name');
-      $id = $tagSql->getValue('id');
+    $catSql = rex_sql::factory();
+    $catSql->setQuery("SELECT * FROM rex_blogger_categories");
+    while($catSql->hasNext()) {
+      $name = $catSql->getValue('name');
+      $id = $catSql->getValue('id');
       $catSelect->addOption($name, $id);
-      $tagSql->next();
+      $catSql->next();
     }
 
     $category = new rex_form_select_element('select');
@@ -171,6 +224,17 @@ class BeForms {
     $postedAt->setAttribute('name', $this->name.'[meta][postedAt]');
     $postedAt->setAttribute('class', 'form-control');
 
+    if ($this->pid) {
+      $sql = rex_sql::factory();
+      $sql->setTable('rex_blogger_entries');
+      $sql->setWhere('id='.$this->pid.' LIMIT 1');
+      $sql->select();
+
+      $category->setValue($sql->getValue('category'));
+      $tags->setValue($sql->getValue('tags'));
+      $postedBy->setValue($sql->getValue('postedBy'));
+      $postedAt->setValue($sql->getValue('postedAt'));
+    }
 
     $content = '';
     $content .= $category->get();
@@ -208,7 +272,7 @@ class BeForms {
 
     $text = new rex_form_element('textarea', null, [], true);
     $text->setLabel('Text');
-    $text->setAttribute('name', $this->name.'[content]['.$clang.'][title]');
+    $text->setAttribute('name', $this->name.'[content]['.$clang.'][text]');
     $text->setAttribute('class', 'form-control');
 
     $preview = new rex_form_widget_media_element('input');
@@ -218,6 +282,18 @@ class BeForms {
     $gallery = new rex_form_widget_medialist_element('select');
     $gallery->setAttribute('name', $this->name.'[content]['.$clang.'][gallery]');
     $gallery->setLabel('Gallery');
+
+    if ($this->pid) {
+      $sql = rex_sql::factory();
+      $sql->setTable('rex_blogger_content');
+      $sql->setWhere('pid='.$this->pid.' AND clang='.$clang.' LIMIT 1');
+      $sql->select();
+
+      $title->setValue($sql->getValue('title'));
+      $text->setValue($sql->getValue('text'));
+      $preview->setValue($sql->getValue('preview'));
+      $gallery->setValue($sql->getValue('gallery'));
+    }
 
     $content = '';
     $content .= $title->get();
