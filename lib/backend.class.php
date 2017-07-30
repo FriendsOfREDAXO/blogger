@@ -26,8 +26,18 @@ class BeBlogger {
   }
 
   private function preHandle() {
+    $isEntryCreate = ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['blogger'] && $this->func === 'add');
     $isEntryUpdate = ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['blogger']);
     $isStatusUpdate = ($this->func === 'online' || $this->func === 'offline');
+
+    if ($isEntryCreate) {
+      $hash = md5(0);
+      $data = $_POST['blogger'][$hash];
+      $return = BloggerApi::create($data);
+      dump($return);
+      $this->func === '';
+      return;
+    }
 
     if ($isEntryUpdate) {
       // save, update, create table
@@ -41,7 +51,7 @@ class BeBlogger {
       }
 
       if ($data['action'] === 'delete') {
-        $this->deleteEntry($formPid);
+        BloggerApi::delete($formPid);
         $this->func = '';
         return;
       }
@@ -53,67 +63,15 @@ class BeBlogger {
       $metaData = $data['meta'];
       $content = $data['content'];
 
-      $this->updateMeta($formPid, $metaData);
+      BloggerApi::updateMeta($formPid, $metaData);
       foreach($content as $clang => $content) {
-        $this->updateEntry($formPid, $clang, $content);
+        BloggerApi::updateEntry($formPid, $clang, $content);
       }
     }
 
     if ($isStatusUpdate) {
       // update database
     }
-  }
-
-  private function deleteEntry($pid) {
-    $query = 'DELETE FROM rex_blogger_entries WHERE id="'.$pid.'"; ';
-    $query .= 'DELETE FROM rex_blogger_content WHERE pid="'.$pid.'"';
-
-    $sql = rex_sql::factory();
-    $sql->setQuery($query);
-  }
-
-  private function updateMeta($id, $data) {
-    $set = [];
-
-    if ($data['category'])
-      $set['category'] = $data['category'];
-
-    if ($data['tags'])
-      $set['tags'] = implode('|', $data['tags']);
-
-    if ($data['postedby'])
-      $set['postedBy'] = $data['postedby'];
-
-    if ($data['postedat'])
-      $set['postedAt'] = $data['postedat'];
-
-    $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_entries');
-    $sql->setValues($set);
-    $sql->setWhere('id='.$id);
-    $sql->update();
-  }
-
-  private function updateEntry($id, $clang, $data) {
-    $set = [];
-
-    if ($data['title'])
-      $set['title'] = $data['title'];
-
-    if ($data['preview'])
-      $set['preview'] = $data['preview'];
-
-    if ($data['gallery'])
-      $set['gallery'] = $data['gallery'];
-
-    if ($data['text'])
-      $set['text'] = $data['text'];
-
-    $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_content');
-    $sql->setValues($set);
-    $sql->setWhere('pid='.$id.' AND clang='.$clang);
-    $sql->update();
   }
 
   private function getList() {
@@ -249,17 +207,14 @@ class BeForms {
     $postedAt->setAttribute('class', 'form-control');
 
     if ($this->pid) {
-      $sql = rex_sql::factory();
-      $sql->setTable('rex_blogger_entries');
-      $sql->setWhere('id='.$this->pid.' LIMIT 1');
-      $sql->select();
+      $meta = BloggerApi::getMeta($this->pid);
 
-      $category->setValue($sql->getValue('category'));
-      foreach(explode('|', $sql->getValue('tags')) as $selected) {
+      $category->setValue($meta['category']);
+      foreach($meta['tags'] as $selected) {
         $tagSelect->setSelected($selected);
       }
-      $postedBy->setValue($sql->getValue('postedBy'));
-      $postedAt->setValue($sql->getValue('postedAt'));
+      $postedBy->setValue($meta['postedBy']);
+      $postedAt->setValue($meta['postedAt']);
     }
 
     $content = '';
@@ -310,15 +265,12 @@ class BeForms {
     $gallery->setLabel('Gallery');
 
     if ($this->pid) {
-      $sql = rex_sql::factory();
-      $sql->setTable('rex_blogger_content');
-      $sql->setWhere('pid='.$this->pid.' AND clang='.$clang.' LIMIT 1');
-      $sql->select();
+      $entry = BloggerApi::getEntry($this->pid, $clang);
 
-      $title->setValue($sql->getValue('title'));
-      $text->setValue($sql->getValue('text'));
-      $preview->setValue($sql->getValue('preview'));
-      $gallery->setValue($sql->getValue('gallery'));
+      $title->setValue($entry['title']);
+      $text->setValue($entry['text']);
+      $preview->setValue($entry['preview']);
+      $gallery->setValue($entry['gallery']);
     }
 
     $content = '';
