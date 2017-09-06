@@ -107,7 +107,7 @@ class Blogger {
     $temp['categoryId'] = (int) $sql->getValue('c.id');
     $temp['categoryName'] = $sql->getValue('c.name');
     $temp['tags'] = $this->getTagNames(explode('|', $sql->getValue('e.tags')));
-    $temp['status'] = $sql->getValue('e.status');
+    $temp['status'] = (int) $sql->getValue('e.status');
     $temp['postedBy'] = $sql->getValue('e.postedBy');
     $temp['postedAt'] = $sql->getValue('e.postedAt');
     $temp['content'] = $this->getContent($temp['id']);
@@ -174,7 +174,7 @@ class Blogger {
     while ($sql->hasNext()) {
       $temp = [];
 
-      $temp['id'] = $sql->getValue('id');
+      $temp['id'] = (int) $sql->getValue('id');
       $temp['name'] = $sql->getValue('name');
 
       $result[] = $temp;
@@ -201,7 +201,7 @@ class Blogger {
     while ($sql->hasNext()) {
       $temp = [];
 
-      $temp['id'] = $sql->getValue('id');
+      $temp['id'] = (int) $sql->getValue('id');
       $temp['tag'] = $sql->getValue('tag');
 
       $result[] = $temp;
