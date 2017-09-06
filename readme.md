@@ -81,7 +81,7 @@ $myBlogger->getTags();
 The same works for the year and/or month of the post date.
 ```php
 $myBlogger->getMonths();
-returns array( array( 'year' => 2017, 'month' => 7 ), ... )
+// returns array( array( 'year' => 2017, 'month' => 7 ), ... )
 ```
 
 ### Database Tables
