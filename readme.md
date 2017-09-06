@@ -5,19 +5,85 @@ Not production ready.
 
 ## TODOS
 
-* Restructure database and how it is accessed
 * Own class for the Backend Pages
-* After create PID is 0
+* After entry was created PID is 0
+* Handle new languages in existing entries
+* Sorting and querying of entries
 
 
 ## Usage
 
-Coming soon...
+Create a new Blogger instance like this:
+```php
+$myBlogger = new Blogger();
+```
 
+With this new blogger instance different data can be accessed.
+For example you can get all Entries with a function or just a single one.
+For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See examples _coming soon_...
 
-## How it Works
+```php
+// get all entries
+$allEntries = $myBlogger->getEntries();
 
-In work...
+// $allEntries looks like this
+array(
+  0 => array(
+    "id" => 1,
+    "categoryId" => 1,
+    "categoryName" => "DefaultCategory",
+    "tags" => array(
+      0 => array(
+        "id" => 1,
+        "tag" => "DefaultTag"
+      ),
+      1 => array(
+        "id" => 2,
+        "tag" => "ExtraTag"
+      )
+    ),
+    "status" => 0,
+    "postedBy" => "admin",
+    "postedAt" => "2017-07-07 12:30:00",
+    "content" => array(
+      1 => array(
+        "clang" => 1,
+        "title" => "Die andere Welt",
+        "text" => "<p>Von einer anderen Welt.</p>",
+        "preview" => "",
+        "gallery" => ""
+      ),
+      2 => array(
+        "clang" => 2,
+        "title" => "The other World",
+        "text" => "<p>From another World</p>",
+        "preview" => "",
+        "gallery" => ""
+      )
+    )
+  ),
+  ...
+)
+
+// similiar, this would look like $allEntries[0]
+$singleEntry = $myBlogger->getEntry(1);
+```
+
+If you need the tags and categories, e.g. so the user can select all entries from a specific category, you can get the data through these functions.
+```php
+
+$myBlogger->getCategories();
+// returns array( array( 'id' => 1, 'name' => 'myCategory' ), ... )
+
+$myBlogger->getTags();
+// returns array( array( 'id' => 1, 'tag' => 'myTag' ), ... )
+```
+
+The same works for the year and/or month of the post date.
+```php
+$myBlogger->getMonths();
+returns array( array( 'year' => 2017, 'month' => 7 ), ... )
+```
 
 ### Database Tables
 
