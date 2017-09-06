@@ -7,6 +7,7 @@ Not production ready.
 
 * Restructure database and how it is accessed
 * Own class for the Backend Pages
+* After create PID is 0
 
 
 ## Usage
