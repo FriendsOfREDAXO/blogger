@@ -71,7 +71,6 @@ $singleEntry = $myBlogger->getEntry(1);
 
 If you need the tags and categories, e.g. so the user can select all entries from a specific category, you can get the data through these functions.
 ```php
-
 $myBlogger->getCategories();
 // returns array( array( 'id' => 1, 'name' => 'myCategory' ), ... )
 
