@@ -49,6 +49,10 @@ class BloggerApi {
     if (isset($data['postedat']))
       $set['postedAt'] = $data['postedat'];
 
+    if (empty($set) === true) {
+      return;
+    }
+
     $sql = rex_sql::factory();
     $sql->setTable('rex_blogger_entries');
     $sql->setValues($set);

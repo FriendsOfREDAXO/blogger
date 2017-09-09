@@ -53,6 +53,9 @@ class Blogger {
    */
   public function getEntry($id) {
     $sql = rex_sql::factory();
+
+    $id = $sql->escape($id);
+
     $sql->setQuery('
       SELECT * FROM
         rex_blogger_entries AS e
@@ -73,6 +76,7 @@ class Blogger {
    */
   public function getEntriesBy($query=[]) {
     $result = [];
+    $sql = rex_sql::factory();
 
     $category = $query['category'];
     $tags = $query['tags'];
@@ -85,31 +89,31 @@ class Blogger {
 
     // check category
     if ($category !== null) {
-      $cat .= 'e.category='.$category;
+      $cat .= 'e.category='.$sql->escape($category);
       $cat = '('.$cat.')';
       $where[] = $cat;
     }
 
     // check tags
     if (isset($tags) && empty($tags) === false) {
-      $tag = 'e.tags="'.implode('|', $tags).'"';
+      $tag = 'e.tags='.$sql->escape(implode('|', $tags));
       $tag = '('.$tag.')';
       $where[] = $tag;
     }
 
     // check year
     if ($year !== null) {
-      $where[] = '(YEAR(e.postedAt)='.$year.')';
+      $where[] = '(YEAR(e.postedAt)='.$sql->escape($year).')';
     }
 
     // check month
     if ($month !== null) {
-      $where[] = '(MONTH(e.postedAt)='.$month.')';
+      $where[] = '(MONTH(e.postedAt)='.$sql->escape($month).')';
     }
 
     // check author
     if ($author !== null) {
-      $where[] = '(e.postedBy="'.$author.'")';
+      $where[] = '(e.postedBy='.$sql->escape($author).')';
     }
 
     if (empty($where)) {
@@ -121,6 +125,11 @@ class Blogger {
     if ($limit === null) {
       $limit = '';
     } else {
+      $limit = explode(',', $limit);
+      $limit = array_map(function($limit) use ($sql) {
+        return (int) $limit;
+      }, $limit);
+      $limit = implode(', ', $limit);
       $limit = 'LIMIT '.$limit;
     }
 
@@ -136,7 +145,8 @@ class Blogger {
       '.$limit.'
     ');
 
-    $sql = rex_sql::factory();
+    echo "<pre>$query</pre>";
+
     $sql->setQuery($query);
     $sql->execute();
 

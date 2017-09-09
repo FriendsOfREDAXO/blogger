@@ -58,7 +58,7 @@ array(
 )
 
 // or give a limit to if you only want to show 10 entries per page
-$pageEntries = $myBlogger->getEntries("1, 10");
+$pageEntries = $myBlogger->getEntries("0, 10");
 $nextPageEntries = $myBlogger->getEntries("10, 10");
 
 // similiar, this would look like $allEntries[0]
@@ -88,7 +88,7 @@ $entriesFrom = $myBlogger->getEntriesBy(array(
   'year' => 2017,
   'month' => 3,
   'author' => 'admin',
-  'limit' => '1, 10'
+  'limit' => '0, 10'
 ));
 
 // You don't have to use everything.

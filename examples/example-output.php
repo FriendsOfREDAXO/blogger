@@ -6,7 +6,7 @@ $myBlogger = new Blogger();
 // dump($myBlogger->getEntries());
 
 // limit the entries, e.g for pages
-// dump($myBlogger->getEntries("1, 2"));
+// dump($myBlogger->getEntries("0, 2"));
 // dump($myBlogger->getEntries("2, 2"));
 // dump($myBlogger->getEntries("4, 2"));
 
@@ -34,6 +34,6 @@ $myBlogger = new Blogger();
 // and show only 10 results from 1 on
 // dump($myBlogger->getEntriesBy(array(
 //   'category' => 2,
-//   'tags' => [1, 2]
-//   'limit' => '1, 10'
+//   'tags' => [1, 2],
+//   'limit' => '0, 10'
 // )));
