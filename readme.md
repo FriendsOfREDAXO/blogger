@@ -6,6 +6,7 @@ Not production ready.
 
 * better time input field
 * config (e.g. should gallery be an option)
+* translation
 * publish as beta to test
 
 ## Usage
