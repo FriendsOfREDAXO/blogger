@@ -96,7 +96,7 @@ $entriesFrom = $myBlogger->getEntriesBy(array(
 
 ### Database Tables
 
-`rex_blogger_entries` contains the meta-data for any entry
+`rex_blogger_entries` contains the meta-data for all entries
 
 * rex_blogger_entries
   * id
