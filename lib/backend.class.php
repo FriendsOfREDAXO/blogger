@@ -236,6 +236,9 @@ class BeForms {
       }
       $postedBy->setValue($meta['postedBy']);
       $postedAt->setValue($meta['postedAt']);
+    } else {
+      $date = new DateTime();
+      $postedAt->setValue($date->format('Y-m-d H:i:s'));
     }
 
     $content = '';

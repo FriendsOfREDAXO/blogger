@@ -2,6 +2,11 @@
 
 Not production ready.
 
+## TODOs
+
+* better time input field
+* config (e.g. should gallery be an option)
+* publish as beta to test
 
 ## Usage
 
