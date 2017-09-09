@@ -145,8 +145,6 @@ class Blogger {
       '.$limit.'
     ');
 
-    echo "<pre>$query</pre>";
-
     $sql->setQuery($query);
     $sql->execute();
 
