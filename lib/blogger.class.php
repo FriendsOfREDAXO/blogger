@@ -15,12 +15,16 @@ class Blogger {
    *
    * @return array
    */
-  public function getEntries($includeOffline=false) {
+  public function getEntries($limit='', $includeOffline=false) {
     $result = [];
 
     $where = $includeOffline
       ? '1'
       : 'status != 1';
+
+    if ($limit !== '') {
+      $limit = 'LIMIT '.$limit;
+    }
 
     $sql = rex_sql::factory();
     $sql->setQuery('
@@ -30,6 +34,7 @@ class Blogger {
         rex_blogger_categories AS c
         ON e.category=c.id
       WHERE '.$where.'
+      '.$limit.'
     ');
     $sql->execute();
 
@@ -66,8 +71,15 @@ class Blogger {
    *
    * @return array 
    */
-  public function getEntriesBy($category=null, array $tags=[], $year=null, $month=null, $author=null) {
+  public function getEntriesBy($query=[]) {
     $result = [];
+
+    $category = $query['category'];
+    $tags = $query['tags'];
+    $year = $query['year'];
+    $month = $query['month'];
+    $author = $query['author'];
+    $limit = $query['limit'];
 
     $where = [];
 
@@ -79,7 +91,7 @@ class Blogger {
     }
 
     // check tags
-    if (empty($tags) === false) {
+    if (isset($tags) && empty($tags) === false) {
       $tag = 'e.tags="'.implode('|', $tags).'"';
       $tag = '('.$tag.')';
       $where[] = $tag;
@@ -87,12 +99,12 @@ class Blogger {
 
     // check year
     if ($year !== null) {
-      $where[] = '(MONTH(e.postedAt)='.$year.')';
+      $where[] = '(YEAR(e.postedAt)='.$year.')';
     }
 
     // check month
     if ($month !== null) {
-      $where[] = '(YEAR(e.postedAt)='.$month.')';
+      $where[] = '(MONTH(e.postedAt)='.$month.')';
     }
 
     // check author
@@ -106,6 +118,12 @@ class Blogger {
       $where = implode(' AND ', $where);
     }
 
+    if ($limit === null) {
+      $limit = '';
+    } else {
+      $limit = 'LIMIT '.$limit;
+    }
+
     $query = ('
       SELECT 
         *
@@ -115,6 +133,7 @@ class Blogger {
         rex_blogger_categories AS c
         ON e.category=c.id
       WHERE '.$where.'
+      '.$limit.'
     ');
 
     $sql = rex_sql::factory();
