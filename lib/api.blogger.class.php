@@ -23,6 +23,10 @@ class BloggerApi {
     if ($data['text'])
       $set['text'] = $data['text'];
 
+    if (empty($set) === true) {
+      return;
+    }
+
     $sql = rex_sql::factory();
     $sql->setTable('rex_blogger_content');
     $sql->setValues($set);
