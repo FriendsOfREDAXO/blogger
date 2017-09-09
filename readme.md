@@ -2,14 +2,6 @@
 
 Not production ready.
 
-
-## TODOS
-
-* Own class for the Backend Pages
-* After entry was created PID is 0
-* Sorting and querying of entries
-
-
 ## Usage
 
 Create a new Blogger instance like this:
@@ -19,7 +11,7 @@ $myBlogger = new Blogger();
 
 With this new blogger instance different data can be accessed.
 For example you can get all Entries with a function or just a single one.
-For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See examples _coming soon_...
+For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See examples _coming soon..._
 
 ```php
 // get all entries
@@ -64,6 +56,10 @@ array(
   ...
 )
 
+// or give a limit to if you only want to show 10 entries per page
+$pageEntries = $myBlogger->getEntries("1, 10");
+$nextPageEntries = $myBlogger->getEntries("10, 10");
+
 // similiar, this would look like $allEntries[0]
 $singleEntry = $myBlogger->getEntry(1);
 ```
@@ -81,6 +77,21 @@ The same works for the year and/or month of the post date.
 ```php
 $myBlogger->getMonths();
 // returns array( array( 'year' => 2017, 'month' => 7 ), ... )
+```
+
+You can use the `Blogger::getEntriesBy` function to query for specific entries with an associative array.
+```php
+$entriesFrom = $myBlogger->getEntriesBy(array(
+  'category' => 1,
+  'tags' => [1, 2, 4]
+  'year' => 2017,
+  'month' => 3,
+  'author' => 'admin',
+  'limit' => '1, 10'
+));
+
+// You don't have to use everything.
+// If you call getEntriesBy without an parameter, you'll just get all entries.
 ```
 
 ### Database Tables
