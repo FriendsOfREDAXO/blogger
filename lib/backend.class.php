@@ -91,9 +91,7 @@ class BeBlogger {
     ");
 
     // TODO
-    // show all blog entries for the current lang
-    // if there is a blog entry only for another lang show it as well,
-    // but mark it
+    // what if entry for current lang does not exist
 
     return BeForms::genList($query);
   }

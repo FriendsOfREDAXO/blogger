@@ -7,7 +7,6 @@ Not production ready.
 
 * Own class for the Backend Pages
 * After entry was created PID is 0
-* Handle new languages in existing entries
 * Sorting and querying of entries
 
 

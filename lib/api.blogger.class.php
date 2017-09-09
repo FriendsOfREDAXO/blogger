@@ -76,10 +76,26 @@ class BloggerApi {
     $sql->setWhere('pid='.$pid.' AND clang='.$clang.' LIMIT 1');
     $sql->select();
 
-    $entry['title'] = $sql->getValue('title');
-    $entry['text'] = $sql->getValue('text');
-    $entry['preview'] = $sql->getValue('preview');
-    $entery['gallery'] = $sql->getValue('gallery');
+    if ($sql->getRows() === 0) {
+      // lang doesn't exist, create new row for clang
+      $csql = rex_sql::factory();
+      $csql->setTable('rex_blogger_content');
+      $csql->setValues(array(
+        'pid' => $pid,
+        'clang' => $clang
+      ));
+      $csql->insert();
+
+      $entry['title'] = "";
+      $entry['text'] = "";
+      $entry['preview'] = "";
+      $entery['gallery'] = "";
+    } else {
+      $entry['title'] = $sql->getValue('title');
+      $entry['text'] = $sql->getValue('text');
+      $entry['preview'] = $sql->getValue('preview');
+      $entery['gallery'] = $sql->getValue('gallery');
+    }
 
     return $entry;
   }
