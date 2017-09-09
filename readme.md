@@ -2,6 +2,7 @@
 
 Not production ready.
 
+
 ## Usage
 
 Create a new Blogger instance like this:
@@ -91,8 +92,9 @@ $entriesFrom = $myBlogger->getEntriesBy(array(
 ));
 
 // You don't have to use everything.
-// If you call getEntriesBy without an parameter, you'll just get all entries.
+// If you call getEntriesBy without any parameters, you'll just get all entries.
 ```
+
 
 ### Database Tables
 
