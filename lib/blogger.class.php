@@ -42,7 +42,7 @@ class Blogger {
   }
 
   /**
-   * Returns array of one entry
+   * Returns one entry
    *
    * @return array
    */
@@ -59,6 +59,74 @@ class Blogger {
     $sql->execute();
 
     return $this->fromSql($sql);
+  }
+
+  /**
+   * Returns array for given category or tags
+   *
+   * @return array 
+   */
+  public function getEntriesBy($category=null, array $tags=[], $year=null, $month=null, $author=null) {
+    $result = [];
+
+    $where = [];
+
+    // check category
+    if ($category !== null) {
+      $cat .= 'e.category='.$category;
+      $cat = '('.$cat.')';
+      $where[] = $cat;
+    }
+
+    // check tags
+    if (empty($tags) === false) {
+      $tag = 'e.tags="'.implode('|', $tags).'"';
+      $tag = '('.$tag.')';
+      $where[] = $tag;
+    }
+
+    // check year
+    if ($year !== null) {
+      $where[] = '(MONTH(e.postedAt)='.$year.')';
+    }
+
+    // check month
+    if ($month !== null) {
+      $where[] = '(YEAR(e.postedAt)='.$month.')';
+    }
+
+    // check author
+    if ($author !== null) {
+      $where[] = '(e.postedBy="'.$author.'")';
+    }
+
+    if (empty($where)) {
+      $where = "1";
+    } else {
+      $where = implode(' AND ', $where);
+    }
+
+    $query = ('
+      SELECT 
+        *
+       FROM
+        rex_blogger_entries AS e
+      LEFT JOIN
+        rex_blogger_categories AS c
+        ON e.category=c.id
+      WHERE '.$where.'
+    ');
+
+    $sql = rex_sql::factory();
+    $sql->setQuery($query);
+    $sql->execute();
+
+    while ($sql->hasNext()) {
+      $result[] = $this->fromSql($sql);      
+      $sql->next();
+    }
+
+    return $result;
   }
 
   /**
