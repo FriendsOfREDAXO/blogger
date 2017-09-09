@@ -33,16 +33,16 @@ class BloggerApi {
   public static function updateMeta($pid, $data) {
     $set = [];
 
-    if ($data['category'])
+    if (isset($data['category']))
       $set['category'] = $data['category'];
 
-    if ($data['tags'])
+    if (isset($data['tags']))
       $set['tags'] = implode('|', $data['tags']);
 
-    if ($data['postedby'])
+    if (isset($data['postedby']))
       $set['postedBy'] = $data['postedby'];
 
-    if ($data['postedat'])
+    if (isset($data['postedat']))
       $set['postedAt'] = $data['postedat'];
 
     $sql = rex_sql::factory();

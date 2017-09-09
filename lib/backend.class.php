@@ -26,15 +26,27 @@ class BeBlogger {
   }
 
   private function preHandle() {
-    $isEntryCreate = ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['blogger'] && $this->func === 'add');
-    $isEntryUpdate = ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['blogger']);
-    $isStatusUpdate = ($this->func === 'online' || $this->func === 'offline');
+    $isEntryCreate = (
+      $_SERVER['REQUEST_METHOD'] === 'POST'
+      && $_POST['blogger']
+      && $this->func === 'add'
+    );
+
+    $isEntryUpdate = (
+      $_SERVER['REQUEST_METHOD'] === 'POST'
+      && $_POST['blogger']
+    );
+
+    $isStatusUpdate = (
+      $this->func === 'online'
+      || $this->func === 'offline'
+    );
 
     if ($isEntryCreate) {
       $hash = md5(0);
       $data = $_POST['blogger'][$hash];
       $this->pid = BloggerApi::create($data);
-      $this->func === 'edit';
+      $this->func = '';
       return;
     }
 
@@ -69,6 +81,7 @@ class BeBlogger {
     }
 
     if ($isStatusUpdate) {
+      // TODO
       // update database
     }
   }
