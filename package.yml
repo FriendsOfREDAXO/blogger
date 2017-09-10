@@ -7,7 +7,3 @@ page:
     entries: { title: 'translate:page_entries' }
     categories: { title: 'translate:page_categories'}
     tags: { title: 'translate:page_tags'}
-
-requires:
-  packages:
-    redactor2: '^3.0.1'

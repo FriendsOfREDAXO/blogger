@@ -5,7 +5,7 @@ Not production ready.
 ## TODOs
 
 * better time input field
-* config (e.g. should gallery be an option)
+* config (e.g. gallery?, text editor?)
 * publish as beta to test
 
 ## Usage
