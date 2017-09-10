@@ -2,7 +2,7 @@ package: blogger
 version: '0.0.0'
 
 page:
-  title: 'blogger'
+  title: 'Blogger'
   subpages:
     entries: { title: 'Einträge' }
     categories: { title: 'Kategorien'}
