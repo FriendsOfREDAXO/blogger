@@ -8,7 +8,6 @@ Not production ready.
 * autofocus on lang change to title
 * show lang as headline to be more specific about what is going to change
 * config (e.g. should gallery be an option)
-* translation
 * publish as beta to test
 
 ## Usage
