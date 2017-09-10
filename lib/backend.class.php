@@ -298,15 +298,15 @@ class BeForms {
       $entry = BloggerApi::getEntry($this->pid, $clang);
 
       $title->setValue($entry['title']);
-      $text->setValue($entry['text']);
       $preview->setValue($entry['preview']);
+      $text->setValue($entry['text']);
       $gallery->setValue($entry['gallery']);
     }
 
     $content = '';
     $content .= $title->get();
-    $content .= $text->get();
     $content .= $preview->get();
+    $content .= $text->get();
     $content .= $gallery->get();
 
     $className = $clang == rex_clang::getCurrentId()
