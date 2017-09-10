@@ -13,7 +13,7 @@ blogger_col_tag = Tag
 blogger_col_name = Name
 
 blogger_btn_save = Speichern
-blogger_btn_apply = Hinzufügen
+blogger_btn_apply = Übernehmen
 blogger_btn_create = Erstellen
 blogger_btn_abort = Abbrechen
 blogger_btn_delete = Löschen
