@@ -6,7 +6,6 @@ Not production ready.
 
 * better time input field
 * autofocus on lang change to title
-* show lang as headline to be more specific about what is going to change
 * config (e.g. should gallery be an option)
 * publish as beta to test
 
