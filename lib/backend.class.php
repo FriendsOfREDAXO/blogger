@@ -230,6 +230,7 @@ class BeForms {
     $postedAt->setLabel($addon->i18n('forms_post_day'));
     $postedAt->setAttribute('name', $this->name.'[meta][postedAt]');
     $postedAt->setAttribute('class', 'form-control');
+    $postedAt->setAttribute('data-blogger-time-form', true);
 
     if ($this->pid) {
       $meta = BloggerApi::getMeta($this->pid);
