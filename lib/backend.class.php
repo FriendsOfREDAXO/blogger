@@ -313,7 +313,16 @@ class BeForms {
       ? ' class="active" data-clang="'.$clang.'"'
       : ' class="hidden" data-clang="'.$clang.'"';
 
-    return '<section'.$className.'>'.$content.'</section>';
+    $langCount = count(rex_clang::getAllIds(true));
+    $headline = '';
+
+    if ($langCount > 1) {
+      $tempClang = rex_clang::get($clang);
+      $tempClang = $tempClang->getName();
+      $headline = '<h2>'.$tempClang.'</h2>';
+    }
+
+    return '<section'.$className.'>'.$headline.$content.'</section>';
   }
 
   static public function genList($query) {

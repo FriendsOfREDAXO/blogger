@@ -20,10 +20,18 @@ form.blogger-form section.lang-list button:last-child {
   border-top-right-radius: 4px;
 }
 
+form.blogger-form section.lang-list button:first-letter {
+  text-transform: uppercase;
+}
+
 .blogger-content-areas section.hidden {
   display: none;
 }
 
 .blogger-content-areas section.active {
   display: block;
+}
+
+.blogger-content-areas section h2:first-letter {
+  text-transform: uppercase;
 }
