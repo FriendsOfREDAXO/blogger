@@ -13,8 +13,8 @@
     $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
     $list->setColumnParams($thIcon, ['func' => 'edit', 'id' => '###id###']);
 
-    $list->setColumnLabel('id', 'Id');
-    $list->setColumnLabel('name', 'Name');
+    $list->setColumnLabel('id', $this->i18n('col_id'));
+    $list->setColumnLabel('name', $this->i18n('col_name'));
 
     $content = $list->get();
 
@@ -36,7 +36,7 @@
     $form = rex_form::factory(rex::getTablePrefix().'blogger_categories', '', 'id='.$id);
 
     $field = $form->addTextField('name');
-    $field->setLabel('Name');
+    $field->setLabel($this->i18n('forms_name'));
 
     if ($func == 'edit') {
       $form->addParam('id', $id);

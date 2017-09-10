@@ -1,0 +1,30 @@
+blogger_title = Blogger
+
+blogger_page_entries = Entries
+blogger_page_categories = Categories
+blogger_page_tags = Tags
+
+blogger_col_nr = No.
+blogger_col_titel = Titel
+blogger_col_cat = Category
+blogger_col_post_day = Publish day
+blogger_col_id = ID
+blogger_col_tag = Tag
+blogger_col_name = Name
+
+blogger_btn_save = Save
+blogger_btn_apply = Apply
+blogger_btn_create = Create
+blogger_btn_abort = Abort
+blogger_btn_delete = Delete
+
+blogger_forms_category = Category
+blogger_forms_tags = Tags
+blogger_forms_author = Author
+blogger_forms_post_day = Publish day
+blogger_forms_title = Titel
+blogger_forms_text = Text
+blogger_forms_preview = Preview
+blogger_forms_gallery = Gallery
+blogger_forms_name = Name
+blogger_forms_tag = Tag

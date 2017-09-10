@@ -160,12 +160,14 @@ class BeForms {
   }
 
   private function genButtons() {
+    $addon = rex_addon::get('blogger');
+
     if ($this->pid === 0) {
       return ('
         <hr />
         <div class="btn-toolbar">
-          <button name="'.$this->name.'[action]" value="save" class="btn btn-save">Create</button>
-          <button name="'.$this->name.'[action]" value="abort" class="btn btn-abort">Abort</button>
+          <button name="'.$this->name.'[action]" value="save" class="btn btn-save">'.$addon->i18n('btn_create').'</button>
+          <button name="'.$this->name.'[action]" value="abort" class="btn btn-abort">'.$addon->i18n('btn_abort').'</button>
         </div>
         <hr />
       ');
@@ -174,16 +176,18 @@ class BeForms {
     return ('
       <hr />
       <div class="btn-toolbar">
-        <button name="'.$this->name.'[action]" value="save" class="btn btn-save">Save</button>
-        <button name="'.$this->name.'[action]" value="apply" class="btn btn-apply">Apply</button>
-        <button name="'.$this->name.'[action]" value="delete" class="btn btn-delete">Delete</button>
-        <button name="'.$this->name.'[action]" value="abort" class="btn btn-abort">Abort</button>
+        <button name="'.$this->name.'[action]" value="save" class="btn btn-save">'.$addon->i18n('btn_save').'</button>
+        <button name="'.$this->name.'[action]" value="apply" class="btn btn-apply">'.$addon->i18n('btn_apply').'</button>
+        <button name="'.$this->name.'[action]" value="delete" class="btn btn-delete">'.$addon->i18n('btn_delete').'</button>
+        <button name="'.$this->name.'[action]" value="abort" class="btn btn-abort">'.$addon->i18n('btn_abort').'</button>
       </div>
       <hr />
     ');
   }
 
   private function genMetaSection() {
+    $addon = rex_addon::get('blogger');
+
     $catSelect = new rex_select();
     $catSql = rex_sql::factory();
     $catSql->setQuery("SELECT * FROM rex_blogger_categories");
@@ -195,7 +199,7 @@ class BeForms {
     }
 
     $category = new rex_form_select_element('select');
-    $category->setLabel('Category');
+    $category->setLabel($addon->i18n('forms_category'));
     $category->setAttribute('name', $this->name.'[meta][category]');
     $category->setAttribute('class', 'form-control');
     $category->setSelect($catSelect);
@@ -212,18 +216,18 @@ class BeForms {
     }
 
     $tags = new rex_form_select_element('select');
-    $tags->setLabel('Tags');
+    $tags->setLabel($addon->i18n('forms_tags'));
     $tags->setAttribute('name', $this->name.'[meta][tags]');
     $tags->setAttribute('class', 'form-control');
     $tags->setSelect($tagSelect);
 
     $postedBy = new rex_form_element('input');
-    $postedBy->setLabel('Author');
+    $postedBy->setLabel($addon->i18n('forms_author'));
     $postedBy->setAttribute('name', $this->name.'[meta][postedBy]');
     $postedBy->setAttribute('class', 'form-control');
 
     $postedAt = new rex_form_element('input');
-    $postedAt->setLabel('Publish Day');
+    $postedAt->setLabel($addon->i18n('forms_post_day'));
     $postedAt->setAttribute('name', $this->name.'[meta][postedAt]');
     $postedAt->setAttribute('class', 'form-control');
 
@@ -270,23 +274,25 @@ class BeForms {
   }
 
   private function genContentSection($clang) {
+    $addon = rex_addon::get('blogger');
+
     $title = new rex_form_element('input');
-    $title->setLabel('Title');
+    $title->setLabel($addon->i18n('forms_title'));
     $title->setAttribute('name', $this->name.'[content]['.$clang.'][title]');
     $title->setAttribute('class', 'form-control');
 
     $text = new rex_form_element('textarea', null, [], true);
-    $text->setLabel('Text');
+    $text->setLabel($addon->i18n('forms_text'));
     $text->setAttribute('name', $this->name.'[content]['.$clang.'][text]');
     $text->setAttribute('class', 'form-control');
 
     $preview = new rex_form_widget_media_element('input');
     $preview->setAttribute('name', $this->name.'[content]['.$clang.'][preview]');
-    $preview->setLabel('Preview');
+    $preview->setLabel($addon->i18n('forms_preview'));
 
     $gallery = new rex_form_widget_medialist_element('select');
     $gallery->setAttribute('name', $this->name.'[content]['.$clang.'][gallery]');
-    $gallery->setLabel('Gallery');
+    $gallery->setLabel($addon->i18n('forms_gallery'));
 
     if ($this->pid) {
       $entry = BloggerApi::getEntry($this->pid, $clang);
@@ -311,6 +317,7 @@ class BeForms {
   }
 
   static public function genList($query) {
+    $blogger = rex_addon::get('blogger');
     $list = rex_list::factory($query);
 
     $list->addTableAttribute('class', 'table-striped');
@@ -322,10 +329,10 @@ class BeForms {
     $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
     $list->setColumnParams($thIcon, ['func' => 'edit', 'pid' => '###id###']);
 
-    $list->setColumnLabel('id', 'Nr.');
-    $list->setColumnLabel('title', 'Titel');
-    $list->setColumnLabel('name', 'Kategorie');
-    $list->setColumnLabel('postedAt', 'Post Tag');
+    $list->setColumnLabel('id', $blogger->i18n('col_nr'));
+    $list->setColumnLabel('title', $blogger->i18n('col_titel'));
+    $list->setColumnLabel('name', $blogger->i18n('col_cat'));
+    $list->setColumnLabel('postedAt', $blogger->i18n('col_post_day'));
 
     $content = $list->get();
 

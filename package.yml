@@ -2,11 +2,11 @@ package: blogger
 version: '0.0.0'
 
 page:
-  title: 'Blogger'
+  title: 'translate:title'
   subpages:
-    entries: { title: 'Einträge' }
-    categories: { title: 'Kategorien'}
-    tags: { title: 'Tags'}
+    entries: { title: 'translate:page_entries' }
+    categories: { title: 'translate:page_categories'}
+    tags: { title: 'translate:page_tags'}
 
 requires:
   packages:
