@@ -7,7 +7,8 @@ $(function() {
     $(`.blogger-form button[data-clang="${clang}"]`).addClass('btn-primary')
 
     contentAreas.removeClass('active').addClass('hidden')
-    $(`.blogger-form section[data-clang="${clang}"]`).removeClass('hidden').addClass('active')
+    const newArea = $(`.blogger-form section[data-clang="${clang}"]`).removeClass('hidden').addClass('active')
+    newArea.find('input')[0].focus();
   }
 
   clangButtons.on('click', (event) => {

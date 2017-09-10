@@ -5,7 +5,6 @@ Not production ready.
 ## TODOs
 
 * better time input field
-* autofocus on lang change to title
 * config (e.g. should gallery be an option)
 * publish as beta to test
 
