@@ -66,6 +66,9 @@ array(
 $pageEntries = $myBlogger->getEntries("0, 10");
 $nextPageEntries = $myBlogger->getEntries("10, 10");
 
+// you can use getLastEntries() with the same use but the output is orderd
+// with the latest entries coming first
+
 // similiar, this would look like $allEntries[0]
 $singleEntry = $myBlogger->getEntry(1);
 ```
@@ -93,7 +96,9 @@ $entriesFrom = $myBlogger->getEntriesBy(array(
   'year' => 2017,
   'month' => 3,
   'author' => 'admin',
-  'limit' => '0, 10'
+  'limit' => '0, 10',
+  'latest' => true, // default false
+  'includeOfflines' => true // default false
 ));
 
 // You don't have to use everything.

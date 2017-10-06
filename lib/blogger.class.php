@@ -47,6 +47,43 @@ class Blogger {
   }
 
   /**
+   * Returns an array of all entries orderd descending by post day
+   *
+   * @return array
+   */
+  public function getLastEntries($limit='', $includeOffline=false) {
+    $result = [];
+
+    $where = $includeOffline
+      ? '1'
+      : 'status != 1';
+
+    if ($limit !== '') {
+      $limit = 'LIMIT '.$limit;
+    }
+
+    $sql = rex_sql::factory();
+    $sql->setQuery('
+      SELECT * FROM
+        rex_blogger_entries AS e
+      LEFT JOIN
+        rex_blogger_categories AS c
+        ON e.category=c.id
+      WHERE '.$where.'
+      ORDER BY e.postedAt DESC
+      '.$limit.'
+    ');
+    $sql->execute();
+
+    while ($sql->hasNext()) {
+      $result[] = $this->fromSql($sql);
+      $sql->next();
+    }
+
+    return $result;
+  }
+
+  /**
    * Returns one entry
    *
    * @return array
@@ -84,6 +121,8 @@ class Blogger {
     $month = $query['month'];
     $author = $query['author'];
     $limit = $query['limit'];
+    $latest = $query=['latest'];
+    $includeOfflines = $query['includeOfflines'];
 
     $where = [];
 
@@ -116,11 +155,24 @@ class Blogger {
       $where[] = '(e.postedBy='.$sql->escape($author).')';
     }
 
+    // don't include the offlines
+    if ($includeOfflines === null || $includeOfflines === false) {
+      $where[] = '(e.status=0)';
+    }
+
     if (empty($where)) {
       $where = "1";
     } else {
       $where = implode(' AND ', $where);
     }
+
+    // order by post date descending
+    if ($latest === null || $latest === false) {
+      $order = '';
+    } else {
+      $order = 'ORDER BY e.postedAt DESC';
+    }
+
 
     if ($limit === null) {
       $limit = '';
@@ -142,6 +194,7 @@ class Blogger {
         rex_blogger_categories AS c
         ON e.category=c.id
       WHERE '.$where.'
+      '.$order.'
       '.$limit.'
     ');
 
