@@ -16,7 +16,7 @@ $myBlogger = new Blogger();
 
 With this new blogger instance different data can be accessed.
 For example you can get all Entries with a function or just a single one.
-For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See examples _coming soon..._
+For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See [examples](https://github.com/AndyBitz/rex_blogger/tree/master/examples). 
 
 ```php
 // get all entries
