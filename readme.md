@@ -1,7 +1,5 @@
 # Blogger - Redaxo 5.x Blog AddOn
 
-Not production ready.
-
 ## TODOs
 
 * polyfill for `datetime-local`
