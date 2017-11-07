@@ -231,6 +231,7 @@ class BeForms {
     $postedAt->setAttribute('name', $this->name.'[meta][postedAt]');
     $postedAt->setAttribute('class', 'form-control');
     $postedAt->setAttribute('data-blogger-time-form', true);
+    $postedAt->setAttribute('type', 'datetime-local');
 
     if ($this->pid) {
       $meta = BloggerApi::getMeta($this->pid);
@@ -240,10 +241,10 @@ class BeForms {
         $tagSelect->setSelected($selected);
       }
       $postedBy->setValue($meta['postedBy']);
-      $postedAt->setValue($meta['postedAt']);
+      $postedAt->setValue(str_replace(' ', 'T', $meta['postedAt']));
     } else {
       $date = new DateTime();
-      $postedAt->setValue($date->format('Y-m-d H:i:s'));
+      $postedAt->setValue(str_replace(' ', 'T', $date->format('Y-m-d H:i:s')));
     }
 
     $content = '';

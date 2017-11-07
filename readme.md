@@ -4,9 +4,8 @@ Not production ready.
 
 ## TODOs
 
-* better time input field
 * config (e.g. gallery?, text editor?)
-* publish as beta to test
+* polyfill for `datetime-local`
 
 ## Usage
 

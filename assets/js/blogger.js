@@ -22,8 +22,28 @@ $(function() {
 })
 
 /**
+ * Check if datetime-local is available
+ */
+$(() => {
+  const isAvail = () => {
+    const input = document.createElement('input')
+    input.setAttribute('type', 'datetime-local')
+    return input.type === 'datetime-local'
+  }
+
+  if (isAvail() === false) {
+    $('[type="datetime-local"]').each(function() {
+      const dateTimeInput = $(this)
+      const val = dateTimeInput.val().replace(/T/, ' ')
+      dateTimeInput.val(val)
+    })
+  }
+})
+
+/**
  * Time Input Field
  */
+/*
 $(() => {
   return // TODO
   const input = $('[data-blogger-time-form]')
@@ -70,4 +90,4 @@ $(() => {
 
   parent.append(monthPanel)
 })
-
+*/

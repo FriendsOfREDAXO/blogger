@@ -47,7 +47,7 @@ class BloggerApi {
       $set['postedBy'] = $data['postedby'];
 
     if (isset($data['postedat']))
-      $set['postedAt'] = $data['postedat'];
+      $set['postedAt'] = str_replace('T', ' ', $data['postedat']);
 
     if (empty($set) === true) {
       return;
