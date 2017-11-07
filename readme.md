@@ -4,7 +4,6 @@ Not production ready.
 
 ## TODOs
 
-* 
 * polyfill for `datetime-local`
 
 ## Usage
