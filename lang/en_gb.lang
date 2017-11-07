@@ -3,6 +3,7 @@ blogger_title = Blogger
 blogger_page_entries = Entries
 blogger_page_categories = Categories
 blogger_page_tags = Tags
+blogger_page_config = Config
 
 blogger_col_nr = No.
 blogger_col_titel = Titel

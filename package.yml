@@ -5,5 +5,6 @@ page:
   title: 'translate:title'
   subpages:
     entries: { title: 'translate:page_entries' }
-    categories: { title: 'translate:page_categories'}
-    tags: { title: 'translate:page_tags'}
+    categories: { title: 'translate:page_categories' }
+    tags: { title: 'translate:page_tags' }
+    config: { title: 'translate:page_config' }
