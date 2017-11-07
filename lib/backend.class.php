@@ -286,7 +286,16 @@ class BeForms {
     $text = new rex_form_element('textarea', null, [], true);
     $text->setLabel($addon->i18n('forms_text'));
     $text->setAttribute('name', $this->name.'[content]['.$clang.'][text]');
-    $text->setAttribute('class', 'form-control');
+
+    $textClass = 'form-control';
+    $configClass = rex_config::get('blogger', 'texteditor');
+
+    if ($configClass) {
+      $textClass .= ' '.$configClass;
+    }
+
+    $text->setAttribute('class', $textClass);
+
 
     $preview = new rex_form_widget_media_element('input');
     $preview->setAttribute('name', $this->name.'[content]['.$clang.'][preview]');
@@ -309,7 +318,10 @@ class BeForms {
     $content .= $title->get();
     $content .= $preview->get();
     $content .= $text->get();
-    $content .= $gallery->get();
+
+    if (rex_config::get('blogger', 'gallery') === 'on') {
+      $content .= $gallery->get();
+    }
 
     $className = $clang == rex_clang::getCurrentId()
       ? ' class="active" data-clang="'.$clang.'"'

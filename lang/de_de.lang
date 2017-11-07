@@ -3,7 +3,7 @@ blogger_title = Blogger
 blogger_page_entries = Einträge
 blogger_page_categories = Kategorien
 blogger_page_tags = Tags
-blogger_page_config = Config
+blogger_page_config = Einstellungen
 
 blogger_col_nr = Nr.
 blogger_col_titel = Titel
@@ -29,3 +29,6 @@ blogger_forms_preview = Preview
 blogger_forms_gallery = Galerie
 blogger_forms_name = Name
 blogger_forms_tag = Tag
+
+blogger_config_texteditor_class = Texteditor
+blogger_config_show_gallery = Galerie anzeigen

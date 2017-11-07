@@ -4,7 +4,7 @@ Not production ready.
 
 ## TODOs
 
-* config (e.g. gallery?, text editor?)
+* 
 * polyfill for `datetime-local`
 
 ## Usage

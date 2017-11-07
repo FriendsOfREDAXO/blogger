@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $blogger = rex_addon::get('blogger');
   $config = rex_config::get('blogger');
 
   if ($_POST) {
@@ -18,16 +19,26 @@
 
   <dl class="rex-form-group form-group">
     <dt>
-      <label class="control-label" for="">Texteditor <code>class</code></label>
+      <label class="control-label" for="">
+        <?= $blogger->i18n('config_texteditor_class') ?>
+        <code>class</code>
+      </label>
     </dt>
     <dd>
-      <input type="text" name="blogger[config][texteditor]" value="<?= $config['texteditor'] ?>" class="form-control">
+      <input
+        type="text"
+        name="blogger[config][texteditor]"
+        value="<?= $config['texteditor'] ?>"
+        placeholder="e.g. redactorEditor2-full"
+        class="form-control">
     </dd>
   </dl>
 
   <dl class="rex-form-group form-group">
     <dt>
-      <label class="control-label" for="">Show Gallery</label>
+      <label class="control-label" for="">
+        <?= $blogger->i18n('config_show_gallery') ?>
+      </label>
     </dt>
     <dd>
       <?php 
@@ -38,6 +49,8 @@
   </dl>
 
   <div class="btn-toolbar">
-    <button name="blogger[config][action]" value="save" class="btn btn-save">Speichern</button>
+    <button name="blogger[config][action]" value="save" class="btn btn-save">
+      <?= $blogger->i18n('btn_save') ?>
+    </button>
   </div>
 </form>
