@@ -2,7 +2,10 @@
 
 ## TODOs
 
+* searchmode for entries
+* on/offline switch for entries
 * polyfill for `datetime-local`
+* better looking UI
 
 ## Usage
 
