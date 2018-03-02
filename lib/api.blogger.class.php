@@ -26,21 +26,10 @@ class BloggerApi {
   public static function updateMeta($pid, $data) {
     $set = [];
 
-    if (isset($data['category']))
-      $set['category'] = $data['category'];
-
-    if (isset($data['tags']))
-      $set['tags'] = implode('|', $data['tags']);
-
-    if (isset($data['postedby']))
-      $set['postedBy'] = $data['postedby'];
-
-    if (isset($data['postedat']))
-      $set['postedAt'] = str_replace('T', ' ', $data['postedat']);
-
-    if (empty($set) === true) {
-      return;
-    }
+    $set['category'] = $data['category'];
+    $set['tags'] = implode('|', $data['tags']);
+    $set['postedBy'] = $data['postedby'];
+    $set['postedAt'] = str_replace('T', ' ', $data['postedat']);
 
     $sql = rex_sql::factory();
     $sql->setTable('rex_blogger_entries');
