@@ -135,9 +135,17 @@ class Blogger {
 
     // check tags
     if (isset($tags) && empty($tags) === false) {
-      $tag = 'e.tags='.$sql->escape(implode('|', $tags));
-      $tag = '('.$tag.')';
-      $where[] = $tag;
+      foreach ($tags as $tag) {
+        $tag = (
+          'e.tags='.$tag.
+          ' OR e.tags LIKE '.$sql->escape('%|'.$tag).
+          ' OR e.tags LIKE '.$sql->escape($tag.'|%').
+          ' OR e.tags LIKE '.$sql->escape('%|'.$tag.'|%')
+        );
+
+        $tag = '('.$tag.')';
+        $where[] = $tag;
+      }
     }
 
     // check year
