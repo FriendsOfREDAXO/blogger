@@ -27,7 +27,7 @@ class BloggerApi {
     $set = [];
 
     $set['category'] = $data['category'];
-    $set['tags'] = implode('|', $data['tags']);
+    $set['tags'] = $data['tags'] ? implode('|', $data['tags']) : '';
     $set['postedBy'] = $data['postedby'];
     $set['postedAt'] = str_replace('T', ' ', $data['postedat']);
 
