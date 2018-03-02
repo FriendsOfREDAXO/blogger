@@ -349,13 +349,23 @@ class BeForms {
     $thIcon = '<a href="'.$list->getUrl(['func' => 'add']).'"><i class="rex-icon rex-icon-add-action"></i></a>';
     $tdIcon = '<i class="rex-icon fa-file-text-o"></i>';
 
-    $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnParams($thIcon, ['func' => 'edit', 'pid' => '###id###']);
+    $list->addColumn($thIcon, $tdIcon, 0, [
+      '<th class="rex-table-icon">###VALUE###</th>',
+      '<td class="rex-table-icon">###VALUE###</td>'
+    ]);
+
+    $list->setColumnParams($thIcon, [
+      'func' => 'edit',
+      'pid' => '###id###'
+    ]);
 
     $list->setColumnLabel('id', $blogger->i18n('col_nr'));
     $list->setColumnLabel('title', $blogger->i18n('col_titel'));
     $list->setColumnLabel('name', $blogger->i18n('col_cat'));
     $list->setColumnLabel('postedAt', $blogger->i18n('col_post_day'));
+
+    
+    $list->setColumnLabel()
 
     $content = $list->get();
 
