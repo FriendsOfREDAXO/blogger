@@ -312,10 +312,6 @@ class BeForms {
       $preview->setValue($entry['preview']);
       $text->setValue($entry['text']);
       $gallery->setValue($entry['gallery']);
-      echo '<pre>';
-      echo 'GET gallery for '.$this->pid.'/'.$clang.'<br />';
-      var_dump($entry);
-      echo '</pre>';
     }
 
     $content = '';
