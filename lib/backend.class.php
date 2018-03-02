@@ -101,6 +101,7 @@ class BeBlogger {
       JOIN rex_blogger_categories AS category
         ON entry.category=category.id
       WHERE content.clang=".$clang."
+      ORDER BY entry.postedAt
     ");
 
     // TODO
