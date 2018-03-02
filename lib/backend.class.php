@@ -296,7 +296,6 @@ class BeForms {
 
     $text->setAttribute('class', $textClass);
 
-
     $preview = new rex_form_widget_media_element('input');
     $preview->setAttribute('name', $this->name.'[content]['.$clang.'][preview]');
     $preview->setLabel($addon->i18n('forms_preview'));
@@ -364,7 +363,7 @@ class BeForms {
     $list->setColumnLabel('name', $blogger->i18n('col_cat'));
     $list->setColumnLabel('postedAt', $blogger->i18n('col_post_day'));
 
-    
+
     $list->setColumnLabel()
 
     $content = $list->get();
