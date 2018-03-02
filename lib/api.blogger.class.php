@@ -97,12 +97,12 @@ class BloggerApi {
       $entry['title'] = "";
       $entry['text'] = "";
       $entry['preview'] = "";
-      $entery['gallery'] = "";
+      $entry['gallery'] = "";
     } else {
       $entry['title'] = $sql->getValue('title');
       $entry['text'] = $sql->getValue('text');
       $entry['preview'] = $sql->getValue('preview');
-      $entery['gallery'] = $sql->getValue('gallery');
+      $entry['gallery'] = $sql->getValue('gallery');
     }
 
     return $entry;
