@@ -11,21 +11,10 @@ class BloggerApi {
   public static function updateEntry($pid, $clang, $data) {
     $set = [];
 
-    if ($data['title'])
-      $set['title'] = $data['title'];
-
-    if ($data['preview'])
-      $set['preview'] = $data['preview'];
-
-    if ($data['gallery'])
-      $set['gallery'] = $data['gallery'];
-
-    if ($data['text'])
-      $set['text'] = $data['text'];
-
-    if (empty($set) === true) {
-      return;
-    }
+    $set['title'] = $data['title'];
+    $set['preview'] = $data['preview'];
+    $set['gallery'] = $data['gallery'];
+    $set['text'] = $data['text'];
 
     $sql = rex_sql::factory();
     $sql->setTable('rex_blogger_content');
