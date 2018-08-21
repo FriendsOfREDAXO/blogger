@@ -30,5 +30,6 @@ blogger_forms_gallery = Galerie
 blogger_forms_name = Name
 blogger_forms_tag = Tag
 
-blogger_config_texteditor_class = Texteditor
+blogger_config_texteditor_class = Texteditor Klasse
 blogger_config_show_gallery = Galerie anzeigen
+blogger_config_show_gallery_option = Sichtbar

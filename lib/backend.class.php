@@ -319,7 +319,13 @@ class BeForms {
     $content .= $preview->get();
     $content .= $text->get();
 
-    if (rex_config::get('blogger', 'gallery') === 'on') {
+    $config = rex_config::get('blogger', 'gallery');
+    $config = explode('|', $config);
+    $config = array_filter($config);
+    $config = $config[0];
+    $showGallery = $config === 'on' || $config === 1;
+
+    if ($showGallery) {
       $content .= $gallery->get();
     }
 
