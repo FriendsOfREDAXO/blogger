@@ -320,10 +320,8 @@ class BeForms {
     $content .= $text->get();
 
     $config = rex_config::get('blogger', 'gallery');
-    $config = explode('|', $config);
-    $config = array_filter($config);
-    $config = $config[0];
-    $showGallery = $config === 'on' || $config === 1;
+    $config = str_replace('|', '', $config);
+    $showGallery = $config === 'on' || $config == 1;
 
     if ($showGallery) {
       $content .= $gallery->get();

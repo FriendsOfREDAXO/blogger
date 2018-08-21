@@ -7,6 +7,6 @@ $field->setLabel(rex_i18n::msg('blogger_config_texteditor_class'));
 
 $field = $form->addCheckboxField('gallery');
 $field->setLabel(rex_i18n::msg('blogger_config_show_gallery'));
-$field->addOption(1, rex_i18n::msg('blogger_config_show_gallery_option'));
+$field->addOption(rex_i18n::msg('blogger_config_show_gallery_option'), 1);
 
 $form->show();
