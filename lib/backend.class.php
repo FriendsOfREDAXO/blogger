@@ -4,119 +4,7 @@
  * Class will be used in Backend to create the user output
  * for the configuration, editing and creating
  */
-class BeBlogger {
-  private $pid;
-  private $func;
-
-  public function __construct() {
-    $this->pid = rex_request('pid', 'int');
-    $this->func = rex_request('func', 'string');
-
-    $this->preHandle();
-  }
-
-  public function getPage() {
-    $isForm = ($this->func === 'add' || $this->func === 'edit');
-
-    if ($isForm) {
-      return $this->getForm();
-    } else {
-      return $this->getList();
-    }
-  }
-
-  private function preHandle() {
-    $isEntryCreate = (
-      $_SERVER['REQUEST_METHOD'] === 'POST'
-      && $_POST['blogger']
-      && $this->func === 'add'
-    );
-
-    $isEntryUpdate = (
-      $_SERVER['REQUEST_METHOD'] === 'POST'
-      && $_POST['blogger']
-    );
-
-    $isStatusUpdate = (
-      $this->func === 'online'
-      || $this->func === 'offline'
-    );
-
-    if ($isEntryCreate) {
-      $hash = md5(0);
-      $data = $_POST['blogger'][$hash];
-      $this->pid = BloggerApi::create($data);
-      $this->func = '';
-      return;
-    }
-
-    if ($isEntryUpdate) {
-      // save, update, create table
-      $hash = md5($this->pid);  // what if pid is not in GET?
-      $data = $_POST['blogger'][$hash];
-      $formPid = $data['pid'];
-
-      if ($data['action'] === 'abort') {
-        $this->func = '';
-        return;
-      }
-
-      if ($data['action'] === 'delete') {
-        BloggerApi::delete($formPid);
-        $this->func = '';
-        return;
-      }
-
-      if ($data['action'] === 'save') {
-        $this->func = '';
-      }
-
-      $metaData = $data['meta'];
-      $content = $data['content'];
-
-      BloggerApi::updateMeta($formPid, $metaData);
-      foreach($content as $clang => $content) {
-        BloggerApi::updateEntry($formPid, $clang, $content);
-      }
-    }
-
-    if ($isStatusUpdate) {
-      // TODO
-      // update database
-    }
-  }
-
-  private function getList() {
-    $clang = rex_clang::getCurrentId();
-
-    $query = ("
-      SELECT
-        entry.id,
-        content.title,
-        category.name,
-        entry.postedAt
-      FROM rex_blogger_entries AS entry
-      JOIN rex_blogger_content AS content
-        ON entry.id=content.pid
-      JOIN rex_blogger_categories AS category
-        ON entry.category=category.id
-      WHERE content.clang=".$clang."
-      ORDER BY entry.postedAt
-    ");
-
-    // TODO
-    // what if entry for current lang does not exist
-
-    return BeForms::genList($query);
-  }
-
-  private function getForm() {
-    $beforms = new BeForms($this->func, $this->pid);
-    return $beforms->genForm();
-  }
-}
-
-class BeForms {
+class BloggerBackendForm {
   private $func;
   private $pid;
   private $hash;
@@ -129,7 +17,11 @@ class BeForms {
     $this->name = 'blogger['.$this->hash.']';
   }
 
-  public function genForm() {
+  public function show() {
+    echo $this->get();
+  }
+
+  public function get() {
     $pid = $this->pid;
     $func = $this->func;
 
@@ -341,40 +233,6 @@ class BeForms {
     }
 
     return '<section'.$className.'>'.$headline.$content.'</section>';
-  }
-
-  static public function genList($query) {
-    $blogger = rex_addon::get('blogger');
-    $list = rex_list::factory($query);
-
-    $list->addTableAttribute('class', 'table-striped');
-    $list->setNoRowsMessage('Es wurden keine Einträge gefunden');
-
-    $thIcon = '<a href="'.$list->getUrl(['func' => 'add']).'"><i class="rex-icon rex-icon-add-action"></i></a>';
-    $tdIcon = '<i class="rex-icon fa-file-text-o"></i>';
-
-    $list->addColumn($thIcon, $tdIcon, 0, [
-      '<th class="rex-table-icon">###VALUE###</th>',
-      '<td class="rex-table-icon">###VALUE###</td>'
-    ]);
-
-    $list->setColumnParams($thIcon, [
-      'func' => 'edit',
-      'pid' => '###id###'
-    ]);
-
-    $list->setColumnLabel('id', $blogger->i18n('col_nr'));
-    $list->setColumnLabel('title', $blogger->i18n('col_titel'));
-    $list->setColumnLabel('name', $blogger->i18n('col_cat'));
-    $list->setColumnLabel('postedAt', $blogger->i18n('col_post_day'));
-
-    $content = $list->get();
-
-    $fragment = new rex_fragment();
-    $fragment->setVar('content', $content, false);
-    $content = $fragment->parse('core/page/section.php');
-
-    return $content;
   }
 }
 
