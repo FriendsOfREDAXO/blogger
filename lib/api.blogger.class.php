@@ -57,7 +57,7 @@ class BloggerApi {
     $set['postedBy'] = $data['postedby'];
     $set['postedAt'] = str_replace('T', ' ', $data['postedat']);
 
-    $table = rex::getTable('blogger_entris');
+    $table = rex::getTable('blogger_entries');
 
     $sql = rex_sql::factory();
     $sql->setTable($table);
@@ -74,7 +74,7 @@ class BloggerApi {
   public static function getMeta(int $pid) {
     $meta = [];
 
-    $table = rex::getTable('blogger_entris');
+    $table = rex::getTable('blogger_entries');
 
     $sql = rex_sql::factory();
     $sql->setTable($table);
@@ -148,7 +148,7 @@ class BloggerApi {
       $metaSet['postedAt'] = $data['meta']['postedat'];
     }
 
-    $table = rex::getTable('blogger_entris');
+    $table = rex::getTable('blogger_entries');
 
     $sql = rex_sql::factory();
     $sql->setTable($table);
