@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This class allows to query all entries,
+ * categories and tags with different functions.
+ */
 class Blogger {
   /**
    * Creates and returns a new Blogger object
