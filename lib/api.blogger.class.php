@@ -1,14 +1,28 @@
 <?php 
 
 class BloggerApi {
-  public static function delete($pid) {
-    $query = 'DELETE FROM rex_blogger_entries WHERE id="'.$pid.'"; ';
-    $query .= 'DELETE FROM rex_blogger_content WHERE pid="'.$pid.'"';
+
+  /**
+   * Deletes an entry.
+   * $pid is the ID of the entry.
+   */
+  public static function delete(int $pid) {
+    $tableEntries = rex::getTable('blogger_entries');
+    $tableContent = rex::getTable('blogger_content');
+
+    $query = sprintf("DELETE FROM `%s` WHERE `id` = %d;", $tableEntries, $pid);
+    $query .= sprintf("DELETE FROM `%s` WHERE `pid` = %d;", $tableContent, $pid);
+
     $sql = rex_sql::factory();
     $sql->setQuery($query);
   }
 
-  public static function updateEntry($pid, $clang, $data) {
+
+  /**
+   * Updates the contents of an entry with the id of $pid.
+   * $data will overwrite every value in the database for that entry.
+   */
+  public static function updateEntry(int $pid, int $clang, array $data) {
     $set = [];
 
     $set['title'] = $data['title'];
@@ -16,14 +30,22 @@ class BloggerApi {
     $set['gallery'] = $data['gallery'];
     $set['text'] = $data['text'];
 
+    $table = rex::getTable('blogger_content');
+
     $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_content');
+    $sql->setTable($table);
     $sql->setValues($set);
-    $sql->setWhere('pid='.$pid.' AND clang='.$clang);
+    $sql->setWhere([ 'pid' => $pid, 'clang' => $clang ]);
     $sql->update();
   }
 
-  public static function updateMeta($pid, $data) {
+
+  /**
+   * Updates the metadata for the entry with the ID of $pid.
+   * $data will overwrite each field in the database.
+   * $data['tags'] is splitted at each "|" character
+   */
+  public static function updateMeta(int $pid, array $data) {
     $set = [];
 
     $set['category'] = $data['category'];
@@ -31,19 +53,28 @@ class BloggerApi {
     $set['postedBy'] = $data['postedby'];
     $set['postedAt'] = str_replace('T', ' ', $data['postedat']);
 
+    $table = rex::getTable('blogger_entris');
+
     $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_entries');
+    $sql->setTable($table);
     $sql->setValues($set);
-    $sql->setWhere('id='.$pid);
+    $sql->setWhere([ 'id' => $pid ]);
     $sql->update();
   }
 
-  public static function getMeta($pid) {
+
+  /**
+   * Returns an array with the metadata
+   * of the entry with the ID $pid.
+   */
+  public static function getMeta(int $pid) {
     $meta = [];
 
+    $table = rex::getTable('blogger_entris');
+
     $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_entries');
-    $sql->setWhere('id='.$pid.' LIMIT 1');
+    $sql->setTable($table);
+    $sql->setWhere(sprintf('id = %d LIMIT 1', $pid));
     $sql->select();
 
     $meta['category'] = $sql->getValue('category');
@@ -54,18 +85,25 @@ class BloggerApi {
     return $meta;
   }
 
-  public static function getEntry($pid, $clang) {
+
+  /**
+   * Returns the content for an entry with the ID $pid and
+   * the Clang $clang.
+   */
+  public static function getEntry(int $pid, int $clang) {
     $entry = [];
 
+    $table = rex::getTable('blogger_content');
+
     $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_content');
+    $sql->setTable($table);
     $sql->setWhere('pid='.$pid.' AND clang='.$clang.' LIMIT 1');
     $sql->select();
 
     if ($sql->getRows() === 0) {
       // lang doesn't exist, create new row for clang
       $csql = rex_sql::factory();
-      $csql->setTable('rex_blogger_content');
+      $csql->setTable($table);
       $csql->setValues(array(
         'pid' => $pid,
         'clang' => $clang
@@ -86,19 +124,30 @@ class BloggerApi {
     return $entry;
   }
 
-  public static function create($data) {
+
+  /**
+   * Creates a new entry and returns the new ID.
+   * $data must look like this [ 'meta' => [], 'content' => []]
+   */
+  public static function create(array $data) {
     $metaSet['category'] = $data['meta']['category'];
-    if ($data['meta']['tags'])
+
+    if ($data['meta']['tags']) {
       $metaSet['tags'] = implode('|', $data['meta']['tags']);
+    }
 
-    if ($data['meta']['postedby'])
+    if ($data['meta']['postedby']) {
       $metaSet['postedBy'] = $data['meta']['postedby'];
+    }
 
-    if ($data['meta']['postedat'])
+    if ($data['meta']['postedat']) {
       $metaSet['postedAt'] = $data['meta']['postedat'];
+    }
+
+    $table = rex::getTable('blogger_entris');
 
     $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_entries');
+    $sql->setTable($table);
     $sql->setValues($metaSet);
     $sql->insert();
 
@@ -111,30 +160,39 @@ class BloggerApi {
     return $pid;
   }
 
-  public static function createContent($pid, $clang, $content) {
+
+  /**
+   * Creates the content for an entry with the ID of $pid and the Clang $clang.
+   */
+  public static function createContent(int $pid, int $clang, array $content) {
     $contentSet = [];
 
     $contentSet['pid'] = $pid;
     $contentSet['clang'] = $clang;
 
-    if ($content['title'])
+    if ($content['title']) {
       $contentSet['title'] = $content['title'];
+    }
 
-    if ($content['text'])
+    if ($content['text']) {
       $contentSet['text'] = $content['text'];
+    }
 
-    if ($content['preview'])
+    if ($content['preview']) {
       $contentSet['preview'] = $content['preview'];
+    }
 
-    if ($content['gallery'])
+    if ($content['gallery']) {
       $contentSet['gallery'] = $content['gallery'];
+    }
+
+    $table = rex::getTable('blogger_content');
 
     $sql = rex_sql::factory();
-    $sql->setTable('rex_blogger_content');
+    $sql->setTable($table);
     $sql->setValues($contentSet);
     $sql->insert();
   }
-
 }
 
 ?>
