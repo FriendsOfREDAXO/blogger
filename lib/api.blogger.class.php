@@ -1,5 +1,9 @@
 <?php 
 
+/**
+ * This class provides some functions to
+ * create, read, update and delete blog entries. 
+ */
 class BloggerApi {
 
   /**
