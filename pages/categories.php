@@ -3,10 +3,11 @@
 $id = rex_request('id', 'int');
 $func = rex_request('func', 'string');
 
-$fragment = new rex_fragment();
 
+$fragment = new rex_fragment();
 $fragment->setVar('id', $id);
 $fragment->setVar('func', $func);
+
 
 switch ($func) {
   case 'add':

@@ -1,12 +1,14 @@
 <?php
 
 $fragment = $this;
-
 $id = $fragment->getVar('id');
 $func = $fragment->getVar('func');
 
+
 $table = rex::getTable('blogger_categories');
 $where = sprintf('`id` = %d', $id);
+
+
 $form = rex_form::factory($table, '', $where);
 
 $field = $form->addTextField('name');
