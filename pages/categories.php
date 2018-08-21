@@ -1,58 +1,19 @@
 <?php
 
-  $func = rex_request('func', 'string');
+$id = rex_request('id', 'int');
+$func = rex_request('func', 'string');
 
-  if ($func == '') {
-    $list = rex_list::factory("SELECT `id`, `name` FROM `".rex::getTablePrefix()."blogger_categories` ORDER BY `id`");
-    $list->addTableAttribute('class', 'table-striped');
-    $list->setNoRowsMessage('Es wurden keine Einträge gefunden');
+$fragment = new rex_fragment();
 
-    $thIcon = '<a href="'.$list->getUrl(['func' => 'add']).'"><i class="rex-icon rex-icon-add-action"></i></a>';
-    $tdIcon = '<i class="rex-icon fa-file-text-o"></i>';
+$fragment->setVar('id', $id);
+$fragment->setVar('func', $func);
 
-    $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnParams($thIcon, ['func' => 'edit', 'id' => '###id###']);
-
-    $list->setColumnLabel('id', $this->i18n('col_id'));
-    $list->setColumnLabel('name', $this->i18n('col_name'));
-
-    $content = $list->get();
-
-    $fragment = new rex_fragment();
-    $fragment->setVar('content', $content, false);
-    $content = $fragment->parse('core/page/section.php');
-
-    echo $content;
-  
-  } else if ($func == 'edit' || $func == 'add') {
-    $id = rex_request('id', 'int');
-
-    if ($func == 'edit') {
-      $formLabel = 'Edit';
-    } elseif ($func == 'add') {
-      $formLabel = 'Hinzufügen';
-    }
-
-    $form = rex_form::factory(rex::getTablePrefix().'blogger_categories', '', 'id='.$id);
-
-    $field = $form->addTextField('name');
-    $field->setLabel($this->i18n('forms_name'));
-
-    if ($func == 'edit') {
-      $form->addParam('id', $id);
-    }
-
-    $content = $form->get();
-
-    $fragment = new rex_fragment();
-    $fragment->setVar('class', 'edit', false);
-    $fragment->setVar('title', $formLabel, false);
-    $fragment->setVar('body', $content, false);
-    $content = $fragment->parse('core/page/section.php');
-
-    echo $content;
-
-  }
-
-
-?>
+switch ($func) {
+  case 'add':
+  case 'edit':
+    echo $fragment->parse('category-form.php');
+    break;
+  default:
+    echo $fragment->parse('category-list.php');
+    break;
+}
