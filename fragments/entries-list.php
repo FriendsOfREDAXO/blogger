@@ -6,7 +6,7 @@ $query = sprintf("
   SELECT
     entry.id,
     content.title,
-    category.name,
+    category.name_%d,
     entry.postedAt
   FROM rex_blogger_entries AS entry
   JOIN rex_blogger_content AS content
@@ -15,7 +15,7 @@ $query = sprintf("
     ON entry.category=category.id
   WHERE content.clang=%d
   ORDER BY entry.postedAt
-", $clang);
+", $clang, $clang);
 
 // TODO
 // what if entry for current lang does not exist
@@ -46,11 +46,13 @@ $list->setColumnLabel('id', rex_i18n::msg('blogger_col_nr'));
 $list->setColumnLabel('title', rex_i18n::msg('blogger_col_titel'));
 $list->setColumnLabel('name', rex_i18n::msg('blogger_col_cat'));
 $list->setColumnLabel('postedAt', rex_i18n::msg('blogger_col_post_day'));
+$list->setColumnLabel('name_' . $clang, rex_i18n::msg('blogger_col_cat'));
 
 // add sorting
 $list->setColumnSortable('id', 'desc');
 $list->setColumnSortable('name', 'desc');
 $list->setColumnSortable('title', 'desc');
 $list->setColumnSortable('postedAt', 'desc');
+$list->setColumnSortable('name_' . $clang, 'desc');
 
 $list->show();

@@ -266,17 +266,31 @@ class Blogger {
    *
    * @return array
    */
-  private function fromSql($sql) {
+  private function fromSql($sql, int $clang = 0) {
     $temp = [];
+
+    $clang = $clang ? $clang : rex_clang::getCurrentId();
 
     $temp['id'] = (int) $sql->getValue('e.id');
     $temp['categoryId'] = (int) $sql->getValue('c.id');
-    $temp['categoryName'] = $sql->getValue('c.name');
+    $temp['categoryName'] = $sql->getValue('c.name_' . $clang);
     $temp['tags'] = $this->getTagNames(explode('|', $sql->getValue('e.tags')));
     $temp['status'] = (int) $sql->getValue('e.status');
     $temp['postedBy'] = $sql->getValue('e.postedBy');
     $temp['postedAt'] = $sql->getValue('e.postedAt');
     $temp['content'] = $this->getContent($temp['id']);
+
+    if ($temp['categoryName'] === '') {
+      $clangs = rex_clang::getAll();
+
+      foreach ($clangs as $clang) {
+        $temp['categoryName'] = $sql->getValue('c.name_' . $clang->getId());
+
+        if ($temp['categoryName'] != '') {
+          break;
+        }
+      }
+    }
 
     return $temp;
   }
@@ -332,19 +346,20 @@ class Blogger {
    *
    * @return array
    */
-  public function getCategories() {
+  public function getCategories($clang = null) {
     $sql = rex_sql::factory();
     $sql->setTable('rex_blogger_categories');
     $sql->select();
     $sql->execute();
 
     $result = [];
+    $clang = $clang ? $clang : rex_clang::getCurrentId();
 
     while ($sql->hasNext()) {
       $temp = [];
 
       $temp['id'] = (int) $sql->getValue('id');
-      $temp['name'] = $sql->getValue('name');
+      $temp['name'] = self::getFirstCategoryNameFromSql($sql, $clang);
 
       $result[] = $temp;
 
@@ -444,6 +459,30 @@ class Blogger {
     }
 
     return $tag;
+  }
+
+
+  /**
+   * Gets the first valid name from an sql object frm the table `rex_blogger_categories`.
+   * If the clangid is zero it will use the current one.
+   */
+  protected static function getFirstCategoryNameFromSql(rex_sql $sql, int $clangId = 0) {
+    $clangs = rex_clang::getAll();
+    $cid = $clangId ? $clangId : rex_clang::getCurrentId();
+
+    $name = $sql->getValue('name_' . $cid);
+
+    if ($name == '') {
+      foreach ($clangs as $clang) {
+        $name = $sql->getValue('name_' . $clang->getId());
+
+        if ($name) {
+          break;
+        }
+      }
+    }
+
+    return $name;
   }
 }
 

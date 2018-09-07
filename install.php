@@ -34,7 +34,12 @@ $table->ensure();
 
 $table = rex_sql_table::get($bloggerCategoriesTable);
 $table->ensurePrimaryIdColumn();
-$table->ensureColumn(new rex_sql_column('name', 'varchar(30)', false, ''));
+
+foreach ($clangs as $clang) {
+  $name = 'name_' . $clang->getId();
+  $table->ensureColumn(new rex_sql_column($name, 'varchar(256)', false, ''));
+}
+
 $table->ensure();
 
 
@@ -57,7 +62,13 @@ $sql->select();
 if ($sql->getRows() <= 0) {
   $sql = rex_sql::factory();
   $sql->setTable($bloggerCategoriesTable);
-  $sql->setValues([ 'id' => 1, 'name' => 'Default' ]);
+  $sql->setValue('id', 1);
+
+  foreach ($clangs as $clang) {
+    $name = 'name_' . $clang->getId();
+    $sql->setValue($name, 'Default');
+  }
+
   $sql->insert();
 }
 

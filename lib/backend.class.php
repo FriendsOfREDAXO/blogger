@@ -85,7 +85,20 @@ class BloggerBackendForm {
     $catSql = rex_sql::factory();
     $catSql->setQuery("SELECT * FROM rex_blogger_categories");
     while($catSql->hasNext()) {
-      $name = $catSql->getValue('name');
+      $name = $catSql->getValue('name_' . rex_clang::getCurrentId());
+
+      if ($name == '') {
+        $clangs = rex_clang::getAll();
+
+        foreach ($clangs as $clang) {
+          $name = $catSql->getValue('name_' . $clang->getId());
+
+          if ($name !== '') {
+            break;
+          }
+        }
+      }
+
       $id = $catSql->getValue('id');
       $catSelect->addOption($name, $id);
       $catSql->next();

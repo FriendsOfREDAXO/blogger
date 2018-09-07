@@ -1,7 +1,9 @@
 <?php
 
+$cid = rex_clang::getCurrentId();
+
 $table = rex::getTable('blogger_categories');
-$query = sprintf("SELECT `id`, `name` FROM `%s` ORDER BY `id`", $table);
+$query = sprintf("SELECT `id`, `name_%d` FROM `%s` ORDER BY `id`", $cid, $table);
 $rowsPerPage = PHP_INT_MAX;
 
 
@@ -23,6 +25,6 @@ $list->addColumn(
 $list->setColumnParams($addIcon, ['func' => 'edit', 'id' => '###id###']);
 
 $list->setColumnLabel('id', rex_i18n::msg('blogger_col_id'));
-$list->setColumnLabel('name', rex_i18n::msg('blogger_col_name'));
+$list->setColumnLabel('name_' . $cid, rex_i18n::msg('blogger_col_name'));
 
 $list->show();
