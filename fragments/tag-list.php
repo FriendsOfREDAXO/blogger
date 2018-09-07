@@ -1,7 +1,9 @@
 <?php
 
+$cid = rex_clang::getCurrentId();
+
 $table = rex::getTable('blogger_tags');
-$query = sprintf("SELECT * FROM `%s`", $table);
+$query = sprintf("SELECT `id`, `tag_%d` FROM `%s`", $cid, $table);
 $rowsPerPage = PHP_INT_MAX;
 
 
@@ -23,6 +25,6 @@ $list->addColumn(
 $list->setColumnParams($addIcon, ['func' => 'edit', 'id' => '###id###']);
 
 $list->setColumnLabel('id', rex_i18n::msg('blogger_col_id'));
-$list->setColumnLabel('tag', rex_i18n::msg('blogger_col_tag'));
+$list->setColumnLabel('tag_' . $cid, rex_i18n::msg('blogger_col_tag'));
 
 $list->show();

@@ -102,7 +102,20 @@ class BloggerBackendForm {
     $tagSql = rex_sql::factory();
     $tagSql->setQuery("SELECT * FROM rex_blogger_tags");
     while($tagSql->hasNext()) {
-      $name = $tagSql->getValue('tag');
+      $name = $tagSql->getValue('tag_' . rex_clang::getCurrentId());
+
+      if ($name == '') {
+        $clangs = rex_clang::getAll();
+
+        foreach ($clangs as $clang) {
+          $name = $tagSql->getValue('tag_' . $clang->getId());
+
+          if ($name !== '') {
+            break;
+          }
+        }
+      }
+
       $id = $tagSql->getValue('id');
       $tagSelect->addOption($name, $id);
       $tagSql->next();

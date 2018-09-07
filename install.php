@@ -1,5 +1,8 @@
 <?php
 
+// clangs
+$clangs = rex_clang::getAll();
+
 // all tables
 $bloggerEntriesTable = rex::getTable('blogger_entries');
 $bloggerContentTable = rex::getTable('blogger_content');
@@ -37,11 +40,16 @@ $table->ensure();
 
 $table = rex_sql_table::get($bloggerTagsTable);
 $table->ensurePrimaryIdColumn();
-$table->ensureColumn(new rex_sql_column('tag', 'varchar(256)', false, ''));
+
+foreach ($clangs as $clang) {
+  $name = 'tag_' . $clang->getId();
+  $table->ensureColumn(new rex_sql_column($name, 'varchar(256)', false, ''));
+}
+
 $table->ensure();
 
 
-// create default entries
+// default categories
 $sql = rex_sql::factory();
 $sql->setTable($bloggerCategoriesTable);
 $sql->select();
@@ -54,6 +62,7 @@ if ($sql->getRows() <= 0) {
 }
 
 
+// default tag
 $sql = rex_sql::factory();
 $sql->setTable($bloggerTagsTable);
 $sql->select();
@@ -61,6 +70,12 @@ $sql->select();
 if ($sql->getRows() <= 0) {
   $sql = rex_sql::factory();
   $sql->setTable($bloggerTagsTable);
-  $sql->setValues([ 'id' => 1, 'tag' => 'Default' ]);
+  $sql->setValue('id', 1);
+
+  foreach ($clangs as $clang) {
+    $name = 'tag_' . $clang->getId();
+    $sql->setValue($name, 'Default');
+  }
+
   $sql->insert();
 }

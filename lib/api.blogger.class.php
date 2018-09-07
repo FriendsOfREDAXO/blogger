@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 /**
  * This class provides some functions to

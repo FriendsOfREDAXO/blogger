@@ -14,12 +14,13 @@ class Blogger {
     
   }
 
+
   /**
    * Returns an array of all entries
    *
    * @return array
    */
-  public function getEntries($limit='', $includeOffline=false) {
+  public function getEntries($limit = '', $includeOffline = false) {
     $result = [];
 
     $where = $includeOffline
@@ -50,12 +51,13 @@ class Blogger {
     return $result;
   }
 
+
   /**
    * Returns an array of all entries orderd descending by post day
    *
    * @return array
    */
-  public function getLastEntries($limit='', $includeOffline=false) {
+  public function getLastEntries($limit = '', $includeOffline = false) {
     $result = [];
 
     $where = $includeOffline
@@ -87,6 +89,7 @@ class Blogger {
     return $result;
   }
 
+
   /**
    * Returns one entry
    *
@@ -110,12 +113,13 @@ class Blogger {
     return $this->fromSql($sql);
   }
 
+
   /**
    * Returns array for given category or tags
    *
    * @return array 
    */
-  public function getEntriesBy($query=[]) {
+  public function getEntriesBy($query = []) {
     $result = [];
     $sql = rex_sql::factory();
 
@@ -221,6 +225,7 @@ class Blogger {
     return $result;
   }
 
+
   /**
    * Each clang as own array with content
    *
@@ -255,6 +260,7 @@ class Blogger {
     return $result;
   }
 
+
   /**
    * Gets all important values from an sql object
    *
@@ -275,12 +281,13 @@ class Blogger {
     return $temp;
   }
 
+
   /**
    * Return array of tags
    *
    * @return array
    */
-  private function getTagNames(array $tagIds) {
+  private function getTagNames(array $tagIds, $clangId = null) {
     $tagIds = array_filter($tagIds, function($item) {
       if ($item === '') {
         return false;
@@ -303,11 +310,13 @@ class Blogger {
     $sql->select();
     $sql->execute();
 
+    $clang = $clangId ?: rex_clang::getCurrentId();
+
     while ($sql->hasNext()) {
       $temp = [];
 
       $temp['id'] = $sql->getValue('id');
-      $temp['tag'] = $sql->getValue('tag');
+      $temp['tag'] = self::getFirstTagNameFromSql($sql, $clang);
 
       $result[] = $temp;
 
@@ -345,12 +354,13 @@ class Blogger {
     return $result;
   }
 
+
   /**
    * Returns array of all tags
    *
    * @return array
    */
-  public function getTags() {
+  public function getTags($clangId = null) {
     $sql = rex_sql::factory();
     $sql->setTable('rex_blogger_tags');
     $sql->select();
@@ -358,11 +368,13 @@ class Blogger {
 
     $result = [];
 
+    $clang = $clangId ?: rex_clang::getCurrentId();
+
     while ($sql->hasNext()) {
       $temp = [];
 
       $temp['id'] = (int) $sql->getValue('id');
-      $temp['tag'] = $sql->getValue('tag');
+      $temp['tag'] = self::getFirstTagNameFromSql($sql, $clang);
 
       $result[] = $temp;
 
@@ -378,7 +390,7 @@ class Blogger {
    *
    * @return array
    */
-  public function getMonths($includeOffline=false) {
+  public function getMonths($includeOffline = false) {
 
     $where = $includeOffline
       ? '1'
@@ -407,6 +419,31 @@ class Blogger {
     }
 
     return $result;
+  }
+
+
+  /**
+   * Gets the first valid tag from an sql object from the table `rex_blogger_tags`.
+   * If the clangid is zero it will use the current one.
+   */
+  protected static function getFirstTagNameFromSql(rex_sql $sql, int $clangId = 0) {
+    $clangs = rex_clang::getAll();
+    $cid = $clangId ? $clangId : rex_clang::getCurrentId();
+
+    $tag = $sql->getValue('tag_' . $cid);
+
+    if ($tag == '') {
+      foreach ($clangs as $clang) {
+        $name = 'tag_' . $clang->getId();
+        $tag = $sql->getValue($name);
+
+        if ($tag) {
+          break;
+        }
+      }
+    }
+
+    return $tag;
   }
 }
 
