@@ -129,7 +129,7 @@ class Blogger {
     $month = $query['month'];
     $author = $query['author'];
     $limit = $query['limit'];
-    $latest = $query=['latest'];
+    $latest = $query['latest'];
     $includeOfflines = $query['includeOfflines'];
 
     $where = [];
