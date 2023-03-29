@@ -124,13 +124,13 @@ class Blogger {
     $sql = rex_sql::factory();
 
     $category = $query['category'];
-    $tags = $query['tags'];
-    $year = $query['year'];
-    $month = $query['month'];
-    $author = $query['author'];
-    $limit = $query['limit'];
-    $latest = $query['latest'];
-    $includeOfflines = $query['includeOfflines'];
+    isset($query['tags'])?$tags = $query['tags']:'';
+    isset($query['year'])?$year = $query['year']:'';
+    isset($query['month'])?$month = $query['month']:'';
+    isset($query['author'])?$author = $query['author']:'';
+    isset($query['limit'])?$limit = $query['limit']:'';
+    isset($query['latest'])?$latest = $query=['latest']:'';
+    isset($query['includeOfflines'])?$includeOfflines = $query['includeOfflines']:'';
 
     $where = [];
 
@@ -157,22 +157,22 @@ class Blogger {
     }
 
     // check year
-    if ($year !== null) {
+    if (isset($year) && $year !== null) {
       $where[] = '(YEAR(e.postedAt)='.$sql->escape($year).')';
     }
 
     // check month
-    if ($month !== null) {
+    if (isset($month) && $month !== null) {
       $where[] = '(MONTH(e.postedAt)='.$sql->escape($month).')';
     }
 
     // check author
-    if ($author !== null) {
+    if (isset($author) && $author !== null) {
       $where[] = '(e.postedBy='.$sql->escape($author).')';
     }
 
     // don't include the offlines
-    if ($includeOfflines === null || $includeOfflines === false) {
+    if (isset($includeOfflines) && ($includeOfflines === null || $includeOfflines === false)) {
       $where[] = '(e.status=0)';
     }
 
@@ -183,7 +183,7 @@ class Blogger {
     }
 
     // order by post date descending
-    if ($latest === null || $latest === false) {
+    if (isset($latest) && ($latest === null || $latest === false)) {
       $order = '';
     } else {
       $order = 'ORDER BY e.postedAt DESC';
