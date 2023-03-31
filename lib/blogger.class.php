@@ -124,13 +124,14 @@ class Blogger {
     $sql = rex_sql::factory();
 
     $category = $query['category'];
-    isset($query['tags'])?$tags = $query['tags']:'';
-    isset($query['year'])?$year = $query['year']:'';
-    isset($query['month'])?$month = $query['month']:'';
-    isset($query['author'])?$author = $query['author']:'';
-    isset($query['limit'])?$limit = $query['limit']:'';
-    isset($query['latest'])?$latest = $query=['latest']:'';
-    isset($query['includeOfflines'])?$includeOfflines = $query['includeOfflines']:'';
+
+    $tags = isset($query['tags']) ? $qurey['tags'] : null;
+    $year = isset($query['year']) ? $query['year'] : null;
+    $month = isset($query['month']) ? $query['month'] : null;
+    $author = isset($query['author']) ? $query['author'] : null;
+    $limit = isset($query['limit']) ? $query['limit'] : null;
+    $latest = isset($query['latest']) ? $query['latest'] : null;
+    $includeOfflines = isset($query['includeOfflines']) ? $query['includeOfflines'] : null;
 
     $where = [];
 
@@ -142,7 +143,7 @@ class Blogger {
     }
 
     // check tags
-    if (isset($tags) && empty($tags) === false) {
+    if ($tags !== null && empty($tags) === false) {
       foreach ($tags as $tag) {
         $tag = (
           'e.tags='.$tag.
@@ -157,22 +158,22 @@ class Blogger {
     }
 
     // check year
-    if (isset($year) && $year !== null) {
+    if ($year !== null) {
       $where[] = '(YEAR(e.postedAt)='.$sql->escape($year).')';
     }
 
     // check month
-    if (isset($month) && $month !== null) {
+    if ($month !== null) {
       $where[] = '(MONTH(e.postedAt)='.$sql->escape($month).')';
     }
 
     // check author
-    if (isset($author) && $author !== null) {
+    if ($author !== null) {
       $where[] = '(e.postedBy='.$sql->escape($author).')';
     }
 
     // don't include the offlines
-    if (isset($includeOfflines) && ($includeOfflines === null || $includeOfflines === false)) {
+    if ($includeOfflines === null || $includeOfflines === false) {
       $where[] = '(e.status=0)';
     }
 
@@ -183,7 +184,7 @@ class Blogger {
     }
 
     // order by post date descending
-    if (isset($latest) && ($latest === null || $latest === false)) {
+    if ($latest === null || $latest === false) {
       $order = '';
     } else {
       $order = 'ORDER BY e.postedAt DESC';
