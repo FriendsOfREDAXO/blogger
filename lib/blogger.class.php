@@ -137,7 +137,7 @@ class Blogger {
 
     // check category
     if ($category !== null) {
-      $cat .= 'e.category='.$sql->escape($category);
+      $cat = 'e.category='.$sql->escape($category);
       $cat = '('.$cat.')';
       $where[] = $cat;
     }
