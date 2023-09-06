@@ -181,7 +181,7 @@ class BloggerBackendForm {
 
     if (sizeof($list) == 1)
       return '';
-    
+
     $content = '';
     foreach($list as $item) {
       $content .= ($item->getId() == $clang)

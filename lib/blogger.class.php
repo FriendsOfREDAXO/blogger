@@ -139,7 +139,6 @@ class Blogger {
     if ($category !== null) {
       $cat = '(e.category='.$sql->escape($category).')';
       $where[] = $cat;
-
     }
 
     // check tags
