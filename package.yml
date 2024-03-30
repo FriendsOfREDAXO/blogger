@@ -3,6 +3,7 @@ version: '1.3.2'
 
 page:
   title: 'translate:title'
+  perm: 'blogger[]'
   subpages:
     entries: { title: 'translate:page_entries' }
     categories: { title: 'translate:page_categories' }
