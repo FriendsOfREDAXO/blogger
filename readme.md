@@ -148,8 +148,8 @@ MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/rex_blogger/bl
 
 ## Autor
 
-Umsetzung
-<https://github.com/AndyBitz/>
+Umsetzung:
+[AndyBitz](https://github.com/AndyBitz/)
 
 **Projekt-Lead**  
 [Alexander Walther](https://github.com/alexplusde)
