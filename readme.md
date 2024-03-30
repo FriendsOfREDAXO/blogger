@@ -1,4 +1,4 @@
-# Blogger - Redaxo 5.x Blog AddOn
+# Blogger - Redaxo 5.x Blog
 
 ## TODOs
 
@@ -139,3 +139,17 @@ tags every entry can have
 * rex_blogger_tags
   * id
   * tag
+
+
+
+## Lizenz
+
+MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/rex_blogger/blob/main/LICENSE)  
+
+## Autor
+
+Umsetzung
+<https://github.com/AndyBitz/>
+
+**Projekt-Lead**  
+[Alexander Walther](https://github.com/alexplusde)
