@@ -16,7 +16,7 @@ Wir danken Alex für die Bereitschaft, das Addon in die Hände von FriendsOfREDA
 
 | Was                                  | News Manager `3.0.3`                        | Blogger `1.3.2` | Neues `^4.1`                                               |
 | ------------------------------------ | ------------------------------------------- | --------------- | ---------------------------------------------------------- |
-| Letzte Weiterentwicklung und Wartung | ❌ 28. Dez. 2022                             | ✅ 31. März 2024 | ✅ aktuell                                                  |
+| Letzte Weiterentwicklung und Wartung | ❌ 28. Dez. 2022                             | ❌ 31. März 2024 | ✅ aktuell                                                  |
 | REDAXO Core-Version                  | ab `^5.4`                                   | ❌ n/a             | ab `^5.15`                                                 |
 | PHP-Version                          | ab `^5.6`                                   | ❌ n/a             | ab `^7.2`                                                  |
 | Addon-Abhängigkeiten                 | URL ab `^2`                                 | Keine           | URL ab `^2`, YForm ab `^4`, YForm Field ab `^2`            |
