@@ -29,7 +29,7 @@ Wir danken Alex für die Bereitschaft, das Addon in die Hände von FriendsOfREDA
 | Dokumentation                        | ✅ als Plugin                                | ❌ nein         | ✅ `Aktuelles > Hilfe`                                      |
 | Einstellungen                        | ❌ nein                                      | `Blogger > Einstellungen` | ✅ `Aktuelles > Einstellungen`                              |
 | WYSIWYG-Editor                       | ✅ ausschließlich `redactor2`                | ✅ frei wählbar | ✅ frei wählbar (`cke5`, `redactor`, `markitup`, `tinymce`) |
-| Backend-Sprachen                     | ✅ ja `de,en,es,se`                          | ✅ ja `de, en`  | ✅ ja `de,en,es,se`                                         |
+| Backend-Sprachen                     | ✅ ja `de,en,es,se`                          | ✅ ja `de, en`  | ✅ ja `de,en,es,fr,it,se`                                   |
 | RSS                                  | ✅ ja                                        | ❌ nein         | ✅ ja                                                       |
 | Fertige Fragmente                    | ✅ ja                                        | ✅ ja           | ✅ ja                                                       |
 | Multi-Domain-Unterstützung           | ❌ über Umwege                               | ❌ n/a             | ✅ ja                                                       |
