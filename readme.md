@@ -1,6 +1,6 @@
 # Blogger - Redaxo 5.x Blog
 
-## Migration von `Blogger` zu `FriendsOfREEAXO\Neues` 4.1
+## Migration von `Blogger` zu `FriendsOfREDAXO\Neues` 4.1
 
 ### Warum der Wechsel?
 
@@ -29,7 +29,7 @@ Wir danken Alex für die Bereitschaft, das Addon in die Hände von FriendsOfREDA
 | Dokumentation                        | ✅ als Plugin                                | ❌ nein         | ✅ `Aktuelles > Hilfe`                                      |
 | Einstellungen                        | ❌ nein                                      | `Blogger > Einstellungen` | ✅ `Aktuelles > Einstellungen`                              |
 | WYSIWYG-Editor                       | ✅ ausschließlich `redactor2`                | ✅ frei wählbar | ✅ frei wählbar (`cke5`, `redactor`, `markitup`, `tinymce`) |
-| Backend-Sprachen                     | ✅ ja `de,en,es,se`                          | ✅ ja `de, en`  | ✅ ja `de,en,es,fr,it,se`                                   |
+| Backend-Sprachen                     | ✅ ja `de,en,es,se`                          | ✅ ja `de, en`  | ✅ ja `da,de,en,el,fi,nl,no,pl,ro,se,es,tr,uk`              |
 | RSS                                  | ✅ ja                                        | ❌ nein         | ✅ ja                                                       |
 | Fertige Fragmente                    | ✅ ja                                        | ✅ ja           | ✅ ja                                                       |
 | Multi-Domain-Unterstützung           | ❌ über Umwege                               | ❌ n/a             | ✅ ja                                                       |
