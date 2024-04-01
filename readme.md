@@ -1,6 +1,6 @@
 # Blogger - Redaxo 5.x Blog
 
-## Migration von REDAXO `FOR News Manager 3`, `Blogger 1.3.2` und `alexplusde\Neues` 3.x zu `FriendsOfREEAXO\Neues` 4.1
+## Migration von `Blogger` zu `FriendsOfREEAXO\Neues` 4.1
 
 ### Warum der Wechsel?
 
