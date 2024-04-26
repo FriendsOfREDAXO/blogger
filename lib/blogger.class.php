@@ -125,7 +125,7 @@ class Blogger {
 
     $category = $query['category'];
 
-    $tags = isset($query['tags']) ? $qurey['tags'] : null;
+    $tags = isset($query['tags']) ? $query['tags'] : null;
     $year = isset($query['year']) ? $query['year'] : null;
     $month = isset($query['month']) ? $query['month'] : null;
     $author = isset($query['author']) ? $query['author'] : null;
