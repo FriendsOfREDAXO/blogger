@@ -1,12 +1,68 @@
 # Blogger - Redaxo 5.x Blog
 
-## TODOs
+## Migration von `Blogger` zu `FriendsOfREDAXO\Neues` 4.1
 
-* searchmode for entries
-* on/offline switch for entries
-* polyfill for `datetime-local`
-* better looking UI
+### Warum der Wechsel?
 
+Das FOR-Addon News-Manager und das FOR-Addon Blogger befinden sich nicht mehr in aktiver Entwicklung. Sie wurden nur noch bis Ende 2022 bzw. Anfang 2024 gewartet. Potentielle Sicherheitslücken werden nicht mehr geschlossen.
+
+Um die Lücke zu schließen, wurde das Addon `Neues` von @alexplus_de zu FriendsOfREDAXO übertragen. Die Weiterentwicklung des Addons "Neues" ist gesichert. Es wird ständig an die neuesten REDAXO-Versionen angepasst und erweitert.
+
+Ein wesentlicher Vorteil gegenüber News Manager oder Blogger ist die Unterstützung von YForm. Damit lassen sich die News-Einträge und Kategorien komfortabel verwalten und erweitern, viele Funktionen von YForm und YOrm können genutzt werden.
+
+Wir danken Alex für die Bereitschaft, das Addon in die Hände von FriendsOfREDAXO zu geben, Alex bleibt Projekt-Lead des Addons. Sowie @schorschy @skerbis und @eace für die Unterstützung bei der Entwicklung.
+
+### Funktions-Parität und Unterschiede
+
+| Was                                  | News Manager `3.0.3`                        | Blogger `1.3.2` | Neues `^4.1`                                               |
+| ------------------------------------ | ------------------------------------------- | --------------- | ---------------------------------------------------------- |
+| Letzte Weiterentwicklung und Wartung | ❌ 28. Dez. 2022                             | ❌ 31. März 2024 | ✅ aktuell                                                  |
+| REDAXO Core-Version                  | ab `^5.4`                                   | ❌ n/a             | ab `^5.15`                                                 |
+| PHP-Version                          | ab `^5.6`                                   | ❌ n/a             | ab `^7.2`                                                  |
+| Addon-Abhängigkeiten                 | URL ab `^2`                                 | Keine           | URL ab `^2`, YForm ab `^4`, YForm Field ab `^2`            |
+| Position im Backend                  | `Addons > News Manager`                     | `Addons > Blogger` | `Aktuelles` (oben)                                         |
+| News-Übersicht                       | ✅ `News Manager > "News anlegen"`           | `Blogger > Einträge` | ✅ `Aktuelles > Einträge`                                   |
+| Kategorien                           | ✅ `News Manager > "Kategorien"`             | `Blogger > Kategorien` | ✅ `Aktuelles > Kategorien`                                 |
+| Kommentare                           | ✅ als Plugin: `News Manager > "Kommentare"` | ❌ nein         | ❌ nein                                                     |
+| Autoren                              | ❌ nein                                      | ❌ nein         | ✅ `Aktuelles > Autoren`                                      |
+| Mehrsprachigkeit                     | ✅ `News Manager > (Sprache auswählen)`      | ❌ nein         | ✅ `Aktuelles > Sprachen`                                   |
+| Dokumentation                        | ✅ als Plugin                                | ❌ nein         | ✅ `Aktuelles > Hilfe`                                      |
+| Einstellungen                        | ❌ nein                                      | `Blogger > Einstellungen` | ✅ `Aktuelles > Einstellungen`                              |
+| WYSIWYG-Editor                       | ✅ ausschließlich `redactor2`                | ✅ frei wählbar | ✅ frei wählbar (`cke5`, `redactor`, `markitup`, `tinymce`) |
+| Backend-Sprachen                     | ✅ ja `de,en,es,se`                          | ✅ ja `de, en`  | ✅ ja `da,de,en,el,fi,nl,no,pl,ro,se,es,tr,uk`              |
+| RSS                                  | ✅ ja                                        | ❌ nein         | ✅ ja                                                       |
+| Fertige Fragmente                    | ✅ ja                                        | ✅ ja           | ✅ ja                                                       |
+| Multi-Domain-Unterstützung           | ❌ über Umwege                               | ❌ n/a             | ✅ ja                                                       |
+| Frei erweiterbare Felder             | ❌ nein                                      | ❌ nein         | ✅ ja (via YForm)                                           |
+| YOrm-Model                           | ❌ nein                                      | ❌ nein         | ✅ ja (News-Einträge, Kategorien, Autoren, Sprachen)        |
+| CSV-Import                           | ❌ nein                                      | ❌ nein         | ✅ ja (via YForm)                                           |
+| CSV-Export                           | ❌ nein                                      | ❌ nein         | ✅ ja (via YForm)                                           |
+| RESTful API                          | ❌ nein                                      | ❌ nein         | ✅ ja (via YForm)                                           |
+
+### Migration von Blogger zu Neues
+
+#### Automatische Daten-Migration von Blogger zu Neues 4.1
+
+Es wird eine automatische Migration von Blogger-Einträgen zu Neues 4.1.
+
+Diese liegt der finalen Version des News Managers bei. Alternativ müssen folgenden Schritte erfolgen.
+
+#### Manuelle Daten-Migration von Blogger zu Neues 4
+
+1. Backup der Datenbank und des Dateisystems
+2. `Neues` installieren (`YForm`, `YForm Field`, `URL` müssen bereits installiert und aktiviert sein)
+3. Bestehende News-Einträge und Kategorien in Neues importieren
+4. Module, Templates und URL-Profile anpassen
+5. `News Manager` deinstallieren.
+
+#### SQL-Befehle zur Migration der Daten von Blogger zu Neues 4
+
+> Hinweis: Die Tags müssen manuell oder mit eigenen Anpassungen übertragen werden, da es hierfür eine eigene Tabelle gibt.
+
+folgt...
+
+```SQL
+```
 
 ## Usage
 
@@ -146,10 +202,6 @@ tags every entry can have
 MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/rex_blogger/blob/main/LICENSE)  
 
 ## Autor
-
-**Friends Of REDAXO**
-http://www.redaxo.org
-https://github.com/FriendsOfREDAXO
 
 Umsetzung:
 [AndyBitz](https://github.com/AndyBitz/)
