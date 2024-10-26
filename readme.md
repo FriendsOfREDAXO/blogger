@@ -146,5 +146,5 @@ https://github.com/FriendsOfREDAXO
 Umsetzung:
 [AndyBitz](https://github.com/AndyBitz/)
 
-**Projekt-Lead**  
+## Projekt-Lead  
 [Alexander Walther](https://github.com/alexplusde)
