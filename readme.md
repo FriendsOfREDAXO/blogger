@@ -4,7 +4,7 @@
 
 ### Warum der Wechsel?
 
-Das FOR-Addon News-Manager und das FOR-Addon Blogger befinden sich nicht mehr in aktiver Entwicklung. Sie wurden nur noch bis Ende 2022 bzw. Anfang 2024 gewartet. Potentielle Sicherheitslücken werden nicht mehr geschlossen.
+Das FOR-Addon News-Manager und das FOR-Addon Blogger befinden sich nicht mehr in aktiver Entwicklung. Sie wurden nur noch bis Ende 2022 bzw. Anfang 2024 gewartet. Potenzielle Sicherheitslücken werden nicht mehr geschlossen.
 
 Um die Lücke zu schließen, wurde das Addon `Neues` von @alexplus_de zu FriendsOfREDAXO übertragen. Die Weiterentwicklung des Addons "Neues" ist gesichert. Es wird ständig an die neuesten REDAXO-Versionen angepasst und erweitert.
 
@@ -45,7 +45,7 @@ Wir danken Alex für die Bereitschaft, das Addon in die Hände von FriendsOfREDA
 
 Es wird eine automatische Migration von Blogger-Einträgen zu Neues 4.1.
 
-Diese liegt der finalen Version des News Managers bei. Alternativ müssen folgenden Schritte erfolgen.
+Diese liegt der finalen Version des News-Managers bei. Alternativ müssen folgenden Schritte erfolgen.
 
 #### Manuelle Daten-Migration von Blogger zu Neues 4
 
@@ -67,13 +67,14 @@ folgt...
 ## Usage
 
 Create a new Blogger instance like this:
+
 ```php
 $myBlogger = new Blogger();
 ```
 
 With this new blogger instance different data can be accessed.
 For example you can get all Entries with a function or just a single one.
-For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See [examples](https://github.com/FriendsOfREDAXO/blogger/tree/main/examples). 
+For now blogger only gives you access to the data it created, this means that you're responsible for your urls and how they are handled. See [examples](https://github.com/FriendsOfREDAXO/blogger/tree/main/examples).
 
 ```php
 // get all entries
@@ -130,6 +131,7 @@ $singleEntry = $myBlogger->getEntry(1);
 ```
 
 If you need the tags and categories, e.g. so the user can select all entries from a specific category, you can get the data through these functions.
+
 ```php
 $myBlogger->getCategories();
 // returns array( array( 'id' => 1, 'name' => 'myCategory' ), ... )
@@ -139,12 +141,14 @@ $myBlogger->getTags();
 ```
 
 The same works for the year and/or month of the post date.
+
 ```php
 $myBlogger->getMonths();
 // returns array( array( 'year' => 2017, 'month' => 7 ), ... )
 ```
 
 You can use the `Blogger::getEntriesBy` function to query for specific entries with an associative array.
+
 ```php
 $entriesFrom = $myBlogger->getEntriesBy(array(
   'category' => 1,
@@ -160,7 +164,6 @@ $entriesFrom = $myBlogger->getEntriesBy(array(
 // You don't have to use everything.
 // If you call getEntriesBy without any parameters, you'll just get all entries.
 ```
-
 
 ### Database Tables
 
@@ -203,8 +206,14 @@ MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/rex_blogger/bl
 
 ## Autor
 
+### Friends Of REDAXO
+
+<https://www.redaxo.org>
+<https://github.com/FriendsOfREDAXO>
+
 Umsetzung:
 [AndyBitz](https://github.com/AndyBitz/)
 
 ## Projekt-Lead  
+
 [Alexander Walther](https://github.com/alexplusde)
